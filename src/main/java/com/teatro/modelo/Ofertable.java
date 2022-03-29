@@ -2,7 +2,12 @@ package com.teatro.modelo;
 
 public interface Ofertable {
 
-	boolean esPromocion();
+	int getId();
 	
+	String getTitulo();
+	
+	String getPrecio();
+	
+	boolean esPromocion();
 	
 }
