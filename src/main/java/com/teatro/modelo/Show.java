@@ -1,13 +1,17 @@
 package com.teatro.modelo;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -24,7 +28,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Show{
+public class Show {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,7 +55,7 @@ public class Show{
 	private String descripcion;
 
 	private boolean esActiva = true;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "categoria_id")
 	private Categoria categoria;
@@ -59,11 +63,10 @@ public class Show{
 	@ManyToOne
 	@JoinColumn(name = "sala_id")
 	private Sala sala;
-
-	public boolean esPromocion() {
-		return false;
-	}
 	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private ArrayList<Promocion> promociones;
+
 	public boolean esNulo() {
 		return false;
 	}
