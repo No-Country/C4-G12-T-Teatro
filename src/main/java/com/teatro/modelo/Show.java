@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Show implements Ofertable{
+public class Show{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,7 +51,7 @@ public class Show implements Ofertable{
 	private String descripcion;
 
 	private boolean esActiva = true;
-
+	
 	@ManyToOne
 	@JoinColumn(name = "categoria_id")
 	private Categoria categoria;
@@ -60,8 +60,11 @@ public class Show implements Ofertable{
 	@JoinColumn(name = "sala_id")
 	private Sala sala;
 
-	@Override
 	public boolean esPromocion() {
+		return false;
+	}
+	
+	public boolean esNulo() {
 		return false;
 	}
 
