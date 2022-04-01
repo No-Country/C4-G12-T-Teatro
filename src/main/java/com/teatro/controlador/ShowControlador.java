@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -29,6 +28,7 @@ import com.teatro.dto.show.CrearShowDto;
 import com.teatro.modelo.Show;
 import com.teatro.modelo.objetonulo.ShowNulo;
 import com.teatro.servicio.ShowServicio;
+import com.teatro.util.paginacion.PaginacionLinks;
 
 import lombok.RequiredArgsConstructor;
 
@@ -49,7 +49,7 @@ public class ShowControlador {
 		Page<Show> shows = showServicio.buscarPorArgs(titulo, precio, fechaShow, categoriaId, pageable);
 
 		if (shows.isEmpty()) {
-			throw new ShowsSinResultadoException();
+			//throw new ShowsSinResultadoException();
 		}
 
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(request.getRequestURL().toString());
@@ -62,17 +62,16 @@ public class ShowControlador {
 	public ResponseEntity<Show> obtenerShow(@PathVariable Long id) {
 		Show show = showServicio.buscarPorId(id).orElse(ShowNulo.construir());
 
-		if (show.esNulo()) {
+		if (show.esNulo())
 			return ResponseEntity.notFound().build();
-		}
-
-		return ResponseEntity.ok(show);
+		else
+			return ResponseEntity.ok(show);
 	}
 
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<Show> nuevoShow(@RequestPart("show") Show show, @RequestPart("file") MultipartFile file) {
-
-		return ResponseEntity.status(HttpStatus.CREATED).body(showServicio.nuevoShow(show, file));
+	public ResponseEntity<Show> nuevoShow(@RequestPart("show") CrearShowDto crearShowDto,
+			@RequestPart("file") MultipartFile file) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(showServicio.nuevoShow(crearShowDto, file));
 	}
 
 	@PutMapping(name = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -80,6 +79,19 @@ public class ShowControlador {
 			@RequestPart("file") MultipartFile file) {
 		Show show = showServicio.editar(id, crearShowDto, file);
 
+		if (show.esNulo())
+			return ResponseEntity.notFound().build();
+		else
+			return ResponseEntity.ok(show);
 	}
 
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Show> borrarShow(@PathVariable Long id) {
+		Show show = showServicio.buscarPorId(id).orElse(ShowNulo.construir());
+
+		if (show.esNulo())
+			return ResponseEntity.notFound().build();
+		else
+			return ResponseEntity.noContent().build();
+	}
 }

@@ -1,7 +1,7 @@
 package com.teatro.modelo;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -56,9 +56,10 @@ public class Show {
 
 	private String descripcion;
 
+	@Builder.Default
 	private boolean esActiva = true;
 
-	@ManyToOne
+	@ManyToOne()
 	@JoinColumn(name = "categoria_id")
 	private Categoria categoria;
 
@@ -67,7 +68,7 @@ public class Show {
 	private Sala sala;
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private ArrayList<Promocion> promociones;
+	private List<Promocion> promociones;
 
 	public boolean esNulo() {
 		return false;

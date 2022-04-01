@@ -17,14 +17,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import com.martiniriarte.controlador.FicheroControlador;
-import com.martiniriarte.modelo.Producto;
 import com.teatro.dto.show.CrearShowDto;
 import com.teatro.modelo.Show;
 import com.teatro.modelo.objetonulo.ShowNulo;
 import com.teatro.repositorio.ShowRepositorio;
 import com.teatro.servicio.base.BaseServicio;
-
-import util.converter.ShowDtoConverter;
+import com.teatro.util.converter.ShowDtoConverter;
 
 @Service
 public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
@@ -43,7 +41,7 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 	public Page<Show> buscarPorArgs(Optional<String> titulo, Optional<Float> precio, Optional<LocalDateTime> fechaShow,
 			Optional<Integer> categoriaId, Pageable pageable) {
 
-		Specification<Show> specNombreProducto = new Specification<Show>() {
+		Specification<Show> specNombreShow = new Specification<Show>() {
 			private static final long serialVersionUID = 6914475554810295752L;
 
 			@Override
@@ -68,13 +66,27 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 				}
 			}
 		};
+		
+		Specification<Show> specDeCategoria = new Specification<Show>() {
+			
+			private static final long serialVersionUID = 1L;
 
-		Specification<Show> ambas = specNombreProducto.and(specPrecioMenorQue);
+			@Override
+			public Predicate toPredicate(Root<Show> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+				if (categoriaId.isPresent()) {
+					return criteriaBuilder.equal(root.get("categoria.getId"), categoriaId.get());
+				} else {
+					return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
+				}
+			}
+		};
 
-		return this.repositorio.findAll(ambas, pageable);
+		Specification<Show> todas = specNombreShow.and(specPrecioMenorQue).and(specDeCategoria);
+
+		return this.repositorio.findAll(todas, pageable);
 	}
 
-	public Object nuevoShow(CrearShowDto dto, MultipartFile file) {
+	public Show nuevoShow(CrearShowDto dto, MultipartFile file) {
 		String urlImagen = null;
 
 		if (!file.isEmpty()) {
@@ -86,13 +98,25 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 		Show show = converter.convertirCrearShowDtoAShow(dto);
 		show.setUrlImagen(urlImagen);
 
-		return converter.convertirProductoAProductoDto(guardar(producto));
+		return show;
 	}
 
 	public Show editar(Long id, CrearShowDto crearShowDto, MultipartFile file) {
 		Show show = buscarPorId(id).orElse(ShowNulo.construir());
 
 		if (!show.esNulo()) {
+			show = Show.builder().titulo(crearShowDto.getTitulo())
+									.precio(crearShowDto.getPrecio())
+									.fechaShow(crearShowDto.getFechaShow())
+									.duracionMinShow(crearShowDto.getDuracionMinShow())
+									.descripcion(crearShowDto.getDescripcion())
+									//.categoria(servicioCategoria.buscarPorId(crearShowDto.getCategoriaId()))
+									//.sala(servicioSala.buscarPorId(crearShowDto.getSalaId()))
+									//.promociones(crearShowDto.getPromocionId().stream()
+									//										.map(id -> servicioPromocion.buscarPorId(id))
+									//										.collect(Arrays.asList()))
+									.build();
+									
 			if (!file.isEmpty()) {
 				String imagen = almacenamientoServicio.store(file);
 				String urlImagen = MvcUriComponentsBuilder

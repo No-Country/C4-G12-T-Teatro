@@ -35,7 +35,7 @@ public abstract class BaseServicio <T, ID, R extends JpaRepository<T, ID>>{
 	}
 
 	public void borrar(T t) {
-		repositorio.delete(t);
+		repositorio.save(t);
 	}
 
 	public void borrarPorId(ID id) {

@@ -1,4 +1,4 @@
-package util.converter;
+package com.teatro.util.converter;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
