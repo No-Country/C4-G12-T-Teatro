@@ -28,35 +28,33 @@ public class Usuario {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotBlank
 	private String nombre;
-	
+
 	@NotBlank
 	private String apellido;
-	
+
 	@Column(unique = true)
 	@Email
 	private String email;
-	
+
 	@NotBlank
 	private String contraseña;
-	
+
 	private String urlAvatar;
-	
+
 	@NotNull
 	@Min(18)
 	private int edad;
-	
+
 	@NotNull
 	private LocalDateTime fechaDeAlta;
-	
-	private boolean esActivo;
-	
+
+	private boolean esActivo = true;
+
 	@ManyToOne
 	@JoinColumn(name = "categoria_id")
 	private Categoria categoria;
-	
-	
-	
+
 }
