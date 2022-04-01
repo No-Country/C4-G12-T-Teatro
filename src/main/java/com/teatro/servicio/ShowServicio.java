@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 
 import com.martiniriarte.controlador.FicheroControlador;
 import com.martiniriarte.modelo.Producto;
+import com.teatro.dto.show.CrearShowDto;
 import com.teatro.modelo.Show;
 import com.teatro.modelo.objetonulo.ShowNulo;
 import com.teatro.repositorio.ShowRepositorio;
@@ -65,17 +66,21 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 		return this.repositorio.findAll(ambas, pageable);
 	}
 
-	public Show nuevoShow(Show show, MultipartFile file) {
-		String urlImagen = null;
+	public Show editar(Long id, CrearShowDto crearShowDto, MultipartFile file) {
+		Show show = buscarPorId(id).orElse(ShowNulo.construir());
 
-		if (!file.isEmpty()) {
-			String imagen = almacenamientoServicio.store(file);
-			urlImagen = MvcUriComponentsBuilder.fromMethodName(FicheroControlador.class, "serveFile", imagen, null)
-					.build().toUriString();
-		}
-		show.setUrlImagen(urlImagen);
-
-		return guardar(show);
+		if (!show.esNulo()) {
+			if(!file.isEmpty()) {
+				String imagen = almacenamientoServicio.store(file);
+				String urlImagen = MvcUriComponentsBuilder.fromMethodName(FicheroControlador.class, "serveFile", imagen, null)
+						.build().toUriString();
+				show.setUrlImagen(urlImagen);
+			}
+			
+			return guardar(show);
+		}else
+			return show;
+		
 	}
 
 }

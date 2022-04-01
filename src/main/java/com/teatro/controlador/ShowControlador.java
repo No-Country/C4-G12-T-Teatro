@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.teatro.dto.show.CrearShowDto;
 import com.teatro.modelo.Show;
 import com.teatro.modelo.objetonulo.ShowNulo;
 import com.teatro.servicio.ShowServicio;
@@ -74,10 +75,11 @@ public class ShowControlador {
 		return ResponseEntity.status(HttpStatus.CREATED).body(showServicio.nuevoShow(show, file));
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<Show> editarShow(@PathVariable Long id, @RequestBody Show show) {
-		Show show = showServicio.editar(id, show);
-			
+	@PutMapping(name = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<Show> editarShow(@PathVariable Long id, @RequestPart(name = "show") CrearShowDto crearShowDto,
+			@RequestPart("file") MultipartFile file) {
+		Show show = showServicio.editar(id, crearShowDto, file);
+
 	}
 
 }
