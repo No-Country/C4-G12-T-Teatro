@@ -63,7 +63,7 @@ public class Show {
 	@ManyToOne
 	@JoinColumn(name = "sala_id")
 	private Sala sala;
-	
+
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private ArrayList<Promocion> promociones;
 

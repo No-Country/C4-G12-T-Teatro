@@ -47,7 +47,6 @@ public class ShowControlador {
 
 		return ResponseEntity.ok().header("link", paginacionLinks.crearLinkHeader(shows, builder))
 				.body(shows.getContent());
-		
 	}
 	
 }
