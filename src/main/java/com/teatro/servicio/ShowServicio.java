@@ -24,12 +24,20 @@ import com.teatro.modelo.objetonulo.ShowNulo;
 import com.teatro.repositorio.ShowRepositorio;
 import com.teatro.servicio.base.BaseServicio;
 
+import util.converter.ShowDtoConverter;
+
 @Service
 public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 
+	private final ShowDtoConverter converter;
+	private final AlmacenamientoServicio almacenamientoServicio;
+
 	@Autowired
-	public ShowServicio(ShowRepositorio repositorio) {
+	public ShowServicio(ShowRepositorio repositorio, ShowDtoConverter converter,
+			AlmacenamientoServicio almacenamientoServicio) {
 		super(repositorio);
+		this.converter = converter;
+		this.almacenamientoServicio = almacenamientoServicio;
 	}
 
 	public Page<Show> buscarPorArgs(Optional<String> titulo, Optional<Float> precio, Optional<LocalDateTime> fechaShow,
@@ -66,21 +74,35 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 		return this.repositorio.findAll(ambas, pageable);
 	}
 
+	public Object nuevoShow(CrearShowDto dto, MultipartFile file) {
+		String urlImagen = null;
+
+		if (!file.isEmpty()) {
+			String imagen = almacenamientoServicio.store(file);
+			urlImagen = MvcUriComponentsBuilder.fromMethodName(FicheroControlador.class, "serveFile", imagen, null)
+					.build().toUriString();
+		}
+		
+		Show show = converter.convertirCrearShowDtoAShow(dto);
+		show.setUrlImagen(urlImagen);
+
+		return converter.convertirProductoAProductoDto(guardar(producto));
+	}
+
 	public Show editar(Long id, CrearShowDto crearShowDto, MultipartFile file) {
 		Show show = buscarPorId(id).orElse(ShowNulo.construir());
 
 		if (!show.esNulo()) {
-			if(!file.isEmpty()) {
+			if (!file.isEmpty()) {
 				String imagen = almacenamientoServicio.store(file);
-				String urlImagen = MvcUriComponentsBuilder.fromMethodName(FicheroControlador.class, "serveFile", imagen, null)
-						.build().toUriString();
+				String urlImagen = MvcUriComponentsBuilder
+						.fromMethodName(FicheroControlador.class, "serveFile", imagen, null).build().toUriString();
 				show.setUrlImagen(urlImagen);
 			}
-			
+
 			return guardar(show);
-		}else
+		} else
 			return show;
-		
 	}
 
 }
