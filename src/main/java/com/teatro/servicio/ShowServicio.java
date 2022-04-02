@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import com.martiniriarte.controlador.FicheroControlador;
+import com.teatro.controlador.FicheroControlador;
 import com.teatro.dto.show.CrearShowDto;
 import com.teatro.modelo.Show;
 import com.teatro.modelo.objetonulo.ShowNulo;
@@ -66,9 +66,8 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 				}
 			}
 		};
-		
+
 		Specification<Show> specDeCategoria = new Specification<Show>() {
-			
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -81,7 +80,20 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 			}
 		};
 
-		Specification<Show> todas = specNombreShow.and(specPrecioMenorQue).and(specDeCategoria);
+		Specification<Show> specFechaMayorQue = new Specification<Show>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Predicate toPredicate(Root<Show> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+				if (fechaShow.isPresent()) {
+					return criteriaBuilder.greaterThanOrEqualTo(root.get("fechaShow"), fechaShow.get());
+				} else {
+					return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
+				}
+			}
+		};
+
+		Specification<Show> todas = specNombreShow.and(specPrecioMenorQue).and(specDeCategoria).and(specFechaMayorQue);
 
 		return this.repositorio.findAll(todas, pageable);
 	}
@@ -94,7 +106,7 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 			urlImagen = MvcUriComponentsBuilder.fromMethodName(FicheroControlador.class, "serveFile", imagen, null)
 					.build().toUriString();
 		}
-		
+
 		Show show = converter.convertirCrearShowDtoAShow(dto);
 		show.setUrlImagen(urlImagen);
 
@@ -105,18 +117,16 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 		Show show = buscarPorId(id).orElse(ShowNulo.construir());
 
 		if (!show.esNulo()) {
-			show = Show.builder().titulo(crearShowDto.getTitulo())
-									.precio(crearShowDto.getPrecio())
-									.fechaShow(crearShowDto.getFechaShow())
-									.duracionMinShow(crearShowDto.getDuracionMinShow())
-									.descripcion(crearShowDto.getDescripcion())
-									//.categoria(servicioCategoria.buscarPorId(crearShowDto.getCategoriaId()))
-									//.sala(servicioSala.buscarPorId(crearShowDto.getSalaId()))
-									//.promociones(crearShowDto.getPromocionId().stream()
-									//										.map(id -> servicioPromocion.buscarPorId(id))
-									//										.collect(Arrays.asList()))
-									.build();
-									
+			show = Show.builder().titulo(crearShowDto.getTitulo()).precio(crearShowDto.getPrecio())
+					.fechaShow(crearShowDto.getFechaShow()).duracionMinShow(crearShowDto.getDuracionMinShow())
+					.descripcion(crearShowDto.getDescripcion())
+					// .categoria(servicioCategoria.buscarPorId(crearShowDto.getCategoriaId()))
+					// .sala(servicioSala.buscarPorId(crearShowDto.getSalaId()))
+					// .promociones(crearShowDto.getPromocionId().stream()
+					// .map(id -> servicioPromocion.buscarPorId(id))
+					// .collect(Arrays.asList()))
+					.build();
+
 			if (!file.isEmpty()) {
 				String imagen = almacenamientoServicio.store(file);
 				String urlImagen = MvcUriComponentsBuilder
