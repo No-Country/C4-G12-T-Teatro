@@ -1,5 +1,6 @@
 package com.teatro.Modelo;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import javax.persistence.Column;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,5 +37,30 @@ public abstract class Promocion {
 	
 	@ManyToMany
 	private ArrayList<Show> shows;
+	
+	@NotNull
+	private float beneficio;
+	
+	
+	
+	public boolean esNulo(){
+		
+		return false;
+	}
+	
+	public int getDuracionMinShow() {
+		
+		return shows.get(0).getDuracionMinShow();
+	}
+	
+	public LocalDateTime getFechaShow() {
+		
+		return shows.get(0).getFechaShow();
+	}
+	
+	
+	
+	
+	
 	
 }
