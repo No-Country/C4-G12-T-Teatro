@@ -21,7 +21,7 @@ public class Butaca {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private boolean es_activa = true;
+	private boolean activa = true;
 	
 	@ManyToOne
 	@JoinColumn(name = "sala_id")

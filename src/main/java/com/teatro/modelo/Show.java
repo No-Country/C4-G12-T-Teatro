@@ -57,7 +57,7 @@ public class Show {
 	private String descripcion;
 
 	@Builder.Default
-	private boolean esActiva = true;
+	private boolean activa = true;
 
 	@ManyToOne()
 	@JoinColumn(name = "categoria_id")
