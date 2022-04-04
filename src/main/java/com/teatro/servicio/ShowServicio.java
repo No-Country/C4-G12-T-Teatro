@@ -120,11 +120,11 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 			show = Show.builder().titulo(crearShowDto.getTitulo()).precio(crearShowDto.getPrecio())
 					.fechaShow(crearShowDto.getFechaShow()).duracionMinShow(crearShowDto.getDuracionMinShow())
 					.descripcion(crearShowDto.getDescripcion())
-					// .categoria(servicioCategoria.buscarPorId(crearShowDto.getCategoriaId()))
-					// .sala(servicioSala.buscarPorId(crearShowDto.getSalaId()))
-					// .promociones(crearShowDto.getPromocionId().stream()
-					// .map(id -> servicioPromocion.buscarPorId(id))
-					// .collect(Arrays.asList()))
+					.categoria(servicioCategoria.buscarPorId(crearShowDto.getCategoriaId()))
+					.sala(servicioSala.buscarPorId(crearShowDto.getSalaId()))
+					.promociones(crearShowDto.getPromocionId().stream()
+					.map(id -> servicioPromocion.buscarPorId(id))
+					.collect(Arrays.asList()))
 					.build();
 
 			if (!file.isEmpty()) {

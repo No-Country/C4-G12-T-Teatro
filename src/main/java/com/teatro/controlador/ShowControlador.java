@@ -72,7 +72,7 @@ public class ShowControlador {
 	public ResponseEntity<Show> nuevoShow(@RequestPart("show") CrearShowDto crearShowDto,
 			@RequestPart("file") MultipartFile file) {
 		Show show = showServicio.guardarImagenYagregarUrlImagen(crearShowDto, file);
-		
+
 		return ResponseEntity.status(HttpStatus.CREATED).body(showServicio.guardar(show));
 	}
 
