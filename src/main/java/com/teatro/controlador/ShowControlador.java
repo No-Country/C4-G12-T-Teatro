@@ -71,7 +71,7 @@ public class ShowControlador {
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Show> nuevoShow(@RequestPart("show") CrearShowDto crearShowDto,
 			@RequestPart("file") MultipartFile file) {
-		Show show = showServicio.guardarImagenYagregarUrlImagen(crearShowDto, file);
+		Show show = showServicio.guardarImagenYAgregarUrlImagen(crearShowDto, file);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(showServicio.guardar(show));
 	}
