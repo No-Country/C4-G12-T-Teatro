@@ -1,6 +1,6 @@
-package com.teatro.Modelo.objetonulo;
+package com.teatro.modelo.objetonulo;
 
-import com.teatro.Modelo.Promocion;
+import com.teatro.modelo.Promocion;
 
 public class PromocionNula extends Promocion {
 
@@ -8,10 +8,8 @@ public class PromocionNula extends Promocion {
 	public boolean esNulo() {
 		return true;
 	}
-	
-	public Promocion construir() {
+
+	public static Promocion construir() {
 		return new PromocionNula();
 	}
-
-	
 }
