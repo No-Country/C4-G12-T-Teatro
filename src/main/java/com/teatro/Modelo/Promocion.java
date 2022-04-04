@@ -1,13 +1,17 @@
 package com.teatro.Modelo;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -21,6 +25,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Promocion {
 	
 	@Id
@@ -33,20 +38,17 @@ public abstract class Promocion {
 	
 	private String urlImagen;
 	
-	private boolean esActiva = true;
+	private boolean activa = true;
 	
 	@ManyToMany
-	private ArrayList<Show> shows;
-	
+	@JoinTable(
+			joinColumns = @JoinColumn(name = "promocion_id"), 
+			inverseJoinColumns = @JoinColumn(name = "show_id"))
 	@NotNull
-	private float beneficio;
+	private List<Show> shows;
 	
 	
-	
-	public boolean esNulo(){
-		
-		return false;
-	}
+	public abstract boolean esNulo();
 	
 	public int getDuracionMinShow() {
 		
@@ -59,7 +61,21 @@ public abstract class Promocion {
 	}
 	
 	
+	public float getPrecio() {
+		return(float) shows.stream().mapToDouble(Show::getPrecio).sum(); 
+	}
 	
+	
+	public String getDescripcion() {
+		
+		return shows.get(0).getDescripcion();
+	}
+	
+	
+	public Categoria getCategoria() {
+		
+		return shows.get(0).getCategoria();
+	}
 	
 	
 	

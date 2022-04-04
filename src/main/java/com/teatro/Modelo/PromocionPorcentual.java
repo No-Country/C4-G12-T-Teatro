@@ -1,21 +1,40 @@
 package com.teatro.Modelo;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@DiscriminatorValue("Porcentual")
+@EqualsAndHashCode(callSuper = true)
 public class PromocionPorcentual extends Promocion {
 
+	
 	private float porcentajeAcobrar;
 	
+	public PromocionPorcentual(String titulo, String urlImagen, List<Show> shows, float descuento) { 
+	    super(null, titulo, urlImagen, true, shows);
+	    this.porcentajeAcobrar = (float)((100-descuento)/100.0);
+	}
 	
-	public PromocionPorcentual(long id, String titulo, String urlImagen, boolean esActiva, ArrayList<Show> shows, float beneficio) { 
-	    super(id, titulo, urlImagen, esActiva, show, beneficio);
+	@Override
+	public float getPrecio() {
+		return super.getPrecio()*porcentajeAcobrar;
+	}
+
+
+	@Override
+	public boolean esNulo() {
+		return false;
 	}
 	
 	
