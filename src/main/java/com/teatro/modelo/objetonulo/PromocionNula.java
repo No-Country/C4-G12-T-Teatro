@@ -4,7 +4,6 @@ import com.teatro.modelo.Promocion;
 
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 public class PromocionNula extends Promocion{
 
 	public Promocion construir() {

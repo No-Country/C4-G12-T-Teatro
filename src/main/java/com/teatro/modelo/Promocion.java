@@ -40,7 +40,9 @@ public abstract class Promocion {
 	private boolean activa = true;
 
 	@ManyToMany
-	@JoinTable(joinColumns = @JoinColumn(name = "promocion_id"), inverseJoinColumns = @JoinColumn(name = "show_id"))
+	@JoinTable(
+			joinColumns = @JoinColumn(name = "promocion_id"), 
+			inverseJoinColumns = @JoinColumn(name = "show_id"))
 	@NonNull
 	private List<Show> shows;
 
@@ -58,7 +60,7 @@ public abstract class Promocion {
 		return shows.get(0).getDuracionMinShow();
 	}
 
-	public String descripcion() {
+	public String getDescripcion() {
 		return shows.get(0).getDescripcion();
 	}
 

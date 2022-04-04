@@ -70,8 +70,8 @@ public class ShowControlador {
 
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Show> nuevoShow(@RequestPart("show") CrearShowDto crearShowDto,
-			@RequestPart("file") MultipartFile file) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(showServicio.nuevoShow(crearShowDto, file));
+			@RequestPart("imagen") MultipartFile imagen) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(showServicio.nuevoShow(crearShowDto, imagen));
 	}
 
 	@PutMapping(name = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
