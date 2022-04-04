@@ -13,6 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CrearShowDto {
+	
 	private String titulo;
 	private float precio;
 	private LocalDateTime fechaShow;

@@ -49,7 +49,7 @@ public class ShowControlador {
 		Page<Show> shows = showServicio.buscarPorArgs(titulo, precio, fechaShow, categoriaId, pageable);
 
 		if (shows.isEmpty()) {
-			//throw new ShowsSinResultadoException();
+			return ResponseEntity.notFound().build();
 		}
 
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(request.getRequestURL().toString());
@@ -71,7 +71,9 @@ public class ShowControlador {
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Show> nuevoShow(@RequestPart("show") CrearShowDto crearShowDto,
 			@RequestPart("file") MultipartFile file) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(showServicio.nuevoShow(crearShowDto, file));
+		Show show = showServicio.guardarImagenYagregarUrlImagen(crearShowDto, file);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(showServicio.guardar(show));
 	}
 
 	@PutMapping(name = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -81,8 +83,9 @@ public class ShowControlador {
 
 		if (show.esNulo())
 			return ResponseEntity.notFound().build();
-		else
+		else {
 			return ResponseEntity.ok(show);
+		}
 	}
 
 	@DeleteMapping("/{id}")
@@ -91,7 +94,9 @@ public class ShowControlador {
 
 		if (show.esNulo())
 			return ResponseEntity.notFound().build();
-		else
+		else {
+			showServicio.borrar(show);
 			return ResponseEntity.noContent().build();
+		}
 	}
 }

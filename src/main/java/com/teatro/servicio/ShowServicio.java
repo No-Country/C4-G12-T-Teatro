@@ -98,7 +98,7 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 		return this.repositorio.findAll(todas, pageable);
 	}
 
-	public Show nuevoShow(CrearShowDto dto, MultipartFile file) {
+	public Show guardarImagenYagregarUrlImagen(CrearShowDto dto, MultipartFile file) {
 		String urlImagen = null;
 
 		if (!file.isEmpty()) {

@@ -23,7 +23,7 @@ public class Butaca {
 	
 	private boolean activa = true;
 	
-	@ManyToOne
+	/*@ManyToOne
 	@JoinColumn(name = "sala_id")
 	private Sala sala;
 	
@@ -33,5 +33,5 @@ public class Butaca {
 	
 	@ManyToOne
 	@JoinColumn(name = "seccion_id")
-	private Seccion seccion;
+	private Seccion seccion;*/
 }
