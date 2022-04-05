@@ -2,7 +2,7 @@ package com.teatro.modelo.objetonulo;
 
 import com.teatro.modelo.Promocion;
 
-public class PromocionNula extends Promocion {
+public class PromocionNula extends Promocion{
 
 	@Override
 	public boolean esNulo() {
