@@ -98,6 +98,4 @@ public class ControladorPromocion {
 
 		return ResponseEntity.ok().body(promocion);
 	}
-
-	//
 }
