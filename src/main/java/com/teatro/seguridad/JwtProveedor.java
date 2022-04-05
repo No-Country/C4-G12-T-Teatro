@@ -71,6 +71,12 @@ public class JwtProveedor {
 		return jwtDecodificado.getClaim("roles").asList(String.class);
 	}
 	
+	public String obtenerUsernameDeJWT(String token) {
+		DecodedJWT jwtDecodificado = verificador.verify(token);
+		
+		return jwtDecodificado.getClaim("username").asString();
+	}
+	
 	public boolean esValido(String token) {
 		try {
 			verificador.verify(token);
