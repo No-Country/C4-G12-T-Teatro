@@ -22,7 +22,7 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 	}
 
 	public Page<Promocion> buscarPorArgs(Optional<String> titulo, Optional<Float> precio,
-			Optional<LocalDateTime> fechaShow, Optional<Integer> categoriaId, Pageable pageable) {
+			Optional<LocalDateTime> fechaShow, Optional<Long> categoriaId, Pageable pageable) {
 		return null;
 	}
 

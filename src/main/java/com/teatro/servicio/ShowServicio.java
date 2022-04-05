@@ -39,7 +39,7 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 	}
 
 	public Page<Show> buscarPorArgs(Optional<String> titulo, Optional<Float> precio, Optional<LocalDateTime> fechaShow,
-			Optional<Integer> categoriaId, Pageable pageable) {
+			Optional<Long> categoriaId, Pageable pageable) {
 
 		Specification<Show> specNombreShow = new Specification<Show>() {
 			private static final long serialVersionUID = 6914475554810295752L;

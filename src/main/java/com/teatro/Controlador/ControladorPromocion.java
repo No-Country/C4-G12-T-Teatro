@@ -43,7 +43,7 @@ public class ControladorPromocion {
 	public ResponseEntity<List<Promocion>> obtenerPromociones(@RequestParam("titulo") Optional<String> titulo,
 			@RequestParam("precio") Optional<Float> precio,
 			@RequestParam("fechaShow") Optional<LocalDateTime> fechaShow,
-			@RequestParam("categoriaId") Optional<Integer> categoriaId,
+			@RequestParam("categoriaId") Optional<Long> categoriaId,
 			@PageableDefault(size = 20, page = 0) Pageable pageable, HttpServletRequest request) {
 
 		Page<Promocion> promociones = promocionServicio.buscarPorArgs(titulo, precio, fechaShow, categoriaId, pageable);
