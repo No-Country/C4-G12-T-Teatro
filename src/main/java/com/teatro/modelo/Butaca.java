@@ -34,4 +34,7 @@ public class Butaca {
 	@ManyToOne
 	@JoinColumn(name = "seccion_id")
 	private Seccion seccion;
+	
+	//comentario
+	
 }
