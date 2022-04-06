@@ -14,17 +14,19 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Data
-@AllArgsConstructor
+@Entity
 @NoArgsConstructor
+@AllArgsConstructor
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Promocion {
 
 	@Id
@@ -39,25 +41,24 @@ public abstract class Promocion {
 
 	private boolean activa = true;
 
-	@ManyToMany
-	@JoinTable(
-			joinColumns = @JoinColumn(name = "promocion_id"), 
-			inverseJoinColumns = @JoinColumn(name = "show_id"))
-	@NonNull
+	@ManyToMany()
+	@JoinTable(joinColumns = @JoinColumn(name = "promocion_id"), inverseJoinColumns = @JoinColumn(name = "show_id"))
+	@NotNull
+	@JsonManagedReference
 	private List<Show> shows;
 
 	public abstract boolean esNula();
 
-	public float getPrecio() {
-		return (float) shows.stream().mapToDouble(Show::getPrecio).sum();
+	public int getDuracionMinShow() {
+		return shows.get(0).getDuracionMinShow();
 	}
 
 	public LocalDateTime getFechaShow() {
 		return shows.get(0).getFechaShow();
 	}
 
-	public int getDuracionMinShow() {
-		return shows.get(0).getDuracionMinShow();
+	public float getPrecio() {
+		return (float) shows.stream().mapToDouble(Show::getPrecio).sum();
 	}
 
 	public String getDescripcion() {

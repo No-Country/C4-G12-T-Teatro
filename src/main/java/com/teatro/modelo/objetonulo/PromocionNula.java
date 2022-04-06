@@ -2,8 +2,6 @@ package com.teatro.modelo.objetonulo;
 
 import com.teatro.modelo.Promocion;
 
-import lombok.NoArgsConstructor;
-
 public class PromocionNula extends Promocion{
 
 	public Promocion construir() {
@@ -14,5 +12,4 @@ public class PromocionNula extends Promocion{
 	public boolean esNula() {
 		return true;
 	}
-
 }

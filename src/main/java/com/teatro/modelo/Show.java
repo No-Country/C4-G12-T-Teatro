@@ -20,6 +20,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -52,6 +54,7 @@ public class Show {
 
 	@Min(0)
 	@Max(240)
+	@NotNull
 	private int duracionMinShow;
 
 	private String descripcion;
@@ -68,6 +71,7 @@ public class Show {
 	private Sala sala;*/
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "shows")
+	@JsonBackReference
 	private List<Promocion> promociones;
 
 	public boolean esNulo() {

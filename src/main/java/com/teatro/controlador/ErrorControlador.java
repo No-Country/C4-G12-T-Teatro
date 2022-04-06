@@ -11,6 +11,7 @@ import com.teatro.error.ApiError;
 
 @RestControllerAdvice
 public class ErrorControlador extends ResponseEntityExceptionHandler{
+	
 	@Override
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {

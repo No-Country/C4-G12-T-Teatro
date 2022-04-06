@@ -30,6 +30,7 @@ public class PromocionPorcentual extends Promocion {
 
 	@Override
 	public boolean esNula() {
+
 		return false;
 	}
 }
