@@ -21,7 +21,6 @@ public class TiketServicio implements ITiketServicio {
 
 	    @Override
 	    public void crear(Tiket tiket) {
-	       
 	  	tikets.save(tiket);
 	    	
 	}
