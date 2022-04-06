@@ -16,6 +16,8 @@ import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -39,9 +41,10 @@ public abstract class Promocion {
 
 	private boolean activa = true;
 
-	@ManyToMany
+	@ManyToMany()
 	@JoinTable(joinColumns = @JoinColumn(name = "promocion_id"), inverseJoinColumns = @JoinColumn(name = "show_id"))
 	@NotNull
+	@JsonManagedReference
 	private List<Show> shows;
 
 	public abstract boolean esNulo();

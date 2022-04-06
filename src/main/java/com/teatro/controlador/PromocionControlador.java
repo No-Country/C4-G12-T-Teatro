@@ -47,7 +47,7 @@ public class PromocionControlador {
 			@PageableDefault(size = 20, page = 0) Pageable pageable, HttpServletRequest request) {
 
 		Page<Promocion> promociones = promocionServicio.buscarPorArgs(titulo, precio, fechaShow, categoriaId, pageable);
-
+		
 		if (promociones.isEmpty()) {
 
 			return ResponseEntity.notFound().build();

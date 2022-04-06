@@ -35,6 +35,4 @@ public class Butaca {
 	@JoinColumn(name = "seccion_id")
 	private Seccion seccion;
 	
-	//comentario
-	
 }
