@@ -39,7 +39,7 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 	}
 
 	public Page<Show> buscarPorArgs(Optional<String> titulo, Optional<Float> precio, Optional<LocalDateTime> fechaShow,
-			Optional<Integer> categoriaId, Pageable pageable) {
+			Optional<Long> categoriaId, Pageable pageable) {
 
 		Specification<Show> specNombreShow = new Specification<Show>() {
 			private static final long serialVersionUID = 6914475554810295752L;
@@ -98,7 +98,7 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 		return this.repositorio.findAll(todas, pageable);
 	}
 
-	public Show guardarImagenYagregarUrlImagen(CrearShowDto dto, MultipartFile file) {
+	public Show guardarImagenYAgregarUrlImagen(CrearShowDto dto, MultipartFile file) {
 		String urlImagen = null;
 
 		if (!file.isEmpty()) {
@@ -120,11 +120,11 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 			show = Show.builder().titulo(crearShowDto.getTitulo()).precio(crearShowDto.getPrecio())
 					.fechaShow(crearShowDto.getFechaShow()).duracionMinShow(crearShowDto.getDuracionMinShow())
 					.descripcion(crearShowDto.getDescripcion())
-					// .categoria(servicioCategoria.buscarPorId(crearShowDto.getCategoriaId()))
-					// .sala(servicioSala.buscarPorId(crearShowDto.getSalaId()))
-					// .promociones(crearShowDto.getPromocionId().stream()
-					// .map(id -> servicioPromocion.buscarPorId(id))
-					// .collect(Arrays.asList()))
+					.categoria(servicioCategoria.buscarPorId(crearShowDto.getCategoriaId()))
+					.sala(servicioSala.buscarPorId(crearShowDto.getSalaId()))
+					.promociones(crearShowDto.getPromocionId().stream()
+					.map(id -> servicioPromocion.buscarPorId(id))
+					.collect(Arrays.asList()))
 					.build();
 
 			if (!file.isEmpty()) {

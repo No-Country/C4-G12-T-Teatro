@@ -24,78 +24,80 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.teatro.dto.show.CrearShowDto;
-import com.teatro.modelo.Show;
-import com.teatro.modelo.objetonulo.ShowNulo;
-import com.teatro.servicio.ShowServicio;
+import com.teatro.modelo.Promocion;
+import com.teatro.modelo.objetonulo.PromocionNula;
+import com.teatro.servicio.PromocionServicio;
 import com.teatro.util.paginacion.PaginacionLinks;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/shows")
-public class ShowControlador {
+@RequestMapping("promociones")
+public class PromocionControlador {
 
-	private final ShowServicio showServicio;
+	private final PromocionServicio promocionServicio;
 	private final PaginacionLinks paginacionLinks;
+
 	@GetMapping
-	public ResponseEntity<List<Show>> obtenerShows(@RequestParam("titulo") Optional<String> titulo,
+	public ResponseEntity<List<Promocion>> obtenerPromociones(@RequestParam("titulo") Optional<String> titulo,
 			@RequestParam("precio") Optional<Float> precio,
 			@RequestParam("fechaShow") Optional<LocalDateTime> fechaShow,
 			@RequestParam("categoriaId") Optional<Long> categoriaId,
 			@PageableDefault(size = 20, page = 0) Pageable pageable, HttpServletRequest request) {
-		Page<Show> shows = showServicio.buscarPorArgs(titulo, precio, fechaShow, categoriaId, pageable);
 
-		if (shows.isEmpty()) {
+		Page<Promocion> promociones = promocionServicio.buscarPorArgs(titulo, precio, fechaShow, categoriaId, pageable);
+
+		if (promociones.isEmpty()) {
+
 			return ResponseEntity.notFound().build();
 		}
 
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(request.getRequestURL().toString());
 
-		return ResponseEntity.ok().header("link", paginacionLinks.crearLinkHeader(shows, builder))
-				.body(shows.getContent());
+		return ResponseEntity.ok().header("link", paginacionLinks.crearLinkHeader(promociones, builder))
+				.body(promociones.getContent());
 	}
 
+	
 	@GetMapping("/{id}")
-	public ResponseEntity<Show> obtenerShow(@PathVariable Long id) {
-		Show show = showServicio.buscarPorId(id).orElse(ShowNulo.construir());
+	public ResponseEntity<Promocion> obtenerPromocion(@PathVariable Long id) {
+		Promocion promocion = promocionServicio.buscarPorId(id).orElse(PromocionNula.construir());
 
-		if (show.esNulo())
+		if (promocion.esNulo()) {
 			return ResponseEntity.notFound().build();
-		else
-			return ResponseEntity.ok(show);
+		}
+
+		return ResponseEntity.ok(promocion);
 	}
 
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<Show> nuevoShow(@RequestPart("show") CrearShowDto crearShowDto,
-			@RequestPart("file") MultipartFile file) {
-		Show show = showServicio.guardarImagenYAgregarUrlImagen(crearShowDto, file);
-
-		return ResponseEntity.status(HttpStatus.CREATED).body(showServicio.guardar(show));
-	}
-
-	@PutMapping(name = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<Show> editarShow(@PathVariable Long id, @RequestPart(name = "show") CrearShowDto crearShowDto,
-			@RequestPart("file") MultipartFile file) {
-		Show show = showServicio.editar(id, crearShowDto, file);
-
-		if (show.esNulo())
-			return ResponseEntity.notFound().build();
-		else {
-			return ResponseEntity.ok(show);
-		}
+	public ResponseEntity<Promocion> crearPromocion(@RequestPart("promocion") Promocion promocionDto,
+			@RequestPart("imagen") MultipartFile imagen) {
+		Promocion promocion = promocionServicio.guardarImagenYagregarUrlImagen(promocionDto, imagen);
+		return ResponseEntity.status(HttpStatus.CREATED).body(promocionServicio.guardar(promocion));
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Show> borrarShow(@PathVariable Long id) {
-		Show show = showServicio.buscarPorId(id).orElse(ShowNulo.construir());
-
-		if (show.esNulo())
+	public ResponseEntity<Promocion> eliminarPromocion(@PathVariable Long id) {
+		Promocion promocion = promocionServicio.buscarPorId(id).orElse(PromocionNula.construir());
+		if (promocion.esNulo()) {
 			return ResponseEntity.notFound().build();
-		else {
-			showServicio.borrar(show);
-			return ResponseEntity.noContent().build();
 		}
+
+		promocionServicio.borrar(promocion);
+
+		return ResponseEntity.noContent().build();
+	}
+
+	@PutMapping(name = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<Promocion> editarPromocion(@PathVariable Long id,
+			@RequestPart("promocion") Promocion promocionDto, @RequestPart("imagen") MultipartFile imagen) {
+		Promocion promocion = promocionServicio.editar(id, promocionDto, imagen);
+		if (promocion.esNulo()) {
+			return ResponseEntity.notFound().build();
+		}
+
+		return ResponseEntity.ok().body(promocion);
 	}
 }

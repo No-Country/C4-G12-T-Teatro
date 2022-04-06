@@ -57,9 +57,9 @@ public class Show {
 	private String descripcion;
 
 	@Builder.Default
-	private boolean esActiva = true;
+	private boolean activa = true;
 
-	/*@ManyToOne()
+	@ManyToOne()
 	@JoinColumn(name = "categoria_id")
 	private Categoria categoria;
 
@@ -68,7 +68,7 @@ public class Show {
 	private Sala sala;
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Promocion> promociones;*/
+	private List<Promocion> promociones;
 
 	public boolean esNulo() {
 		return false;
