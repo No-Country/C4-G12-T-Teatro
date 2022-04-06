@@ -20,9 +20,7 @@ public class Tiket{
 	    
 		public Tiket() {
 		}
-
-
-
+		
 		public Tiket(Long id, LocalDate local) {
 			this.id = id;
 			this.local = local;
