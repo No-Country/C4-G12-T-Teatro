@@ -39,7 +39,6 @@ public class ShowControlador {
 
 	private final ShowServicio showServicio;
 	private final PaginacionLinks paginacionLinks;
-
 	@GetMapping
 	public ResponseEntity<List<Show>> obtenerShows(@RequestParam("titulo") Optional<String> titulo,
 			@RequestParam("precio") Optional<Float> precio,
