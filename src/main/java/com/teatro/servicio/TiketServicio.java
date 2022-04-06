@@ -11,6 +11,8 @@ import com.teatro.repositorio.TiketRepositorio;
 @Service
 public class TiketServicio implements ITiketServicio {
 
+	
+	
 	@Autowired
 	public TiketRepositorio tikets;
 

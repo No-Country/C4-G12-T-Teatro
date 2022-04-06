@@ -27,10 +27,6 @@ public class ControladorTiket {
     	return  new ResponseEntity<>(HttpStatus.CREATED) ;
     }
     
-  
-    
-    
-    
 
     @GetMapping("/tiket")
     @ResponseBody
