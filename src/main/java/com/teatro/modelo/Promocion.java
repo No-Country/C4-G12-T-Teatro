@@ -42,7 +42,9 @@ public abstract class Promocion {
 	private boolean activa = true;
 
 	@ManyToMany()
-	@JoinTable(joinColumns = @JoinColumn(name = "promocion_id"), inverseJoinColumns = @JoinColumn(name = "show_id"))
+	@JoinTable(
+			joinColumns = @JoinColumn(name = "promocion_id"), 
+			inverseJoinColumns = @JoinColumn(name = "show_id"))
 	@NotNull
 	@JsonManagedReference
 	private List<Show> shows;

@@ -64,7 +64,7 @@ public class PromocionControlador {
 	public ResponseEntity<Promocion> obtenerPromocion(@PathVariable Long id) {
 		Promocion promocion = promocionServicio.buscarPorId(id).orElse(PromocionNula.construir());
 
-		if (promocion.esNulo()) {
+		if (promocion.esNula()) {
 			return ResponseEntity.notFound().build();
 		}
 
@@ -81,7 +81,7 @@ public class PromocionControlador {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Promocion> eliminarPromocion(@PathVariable Long id) {
 		Promocion promocion = promocionServicio.buscarPorId(id).orElse(PromocionNula.construir());
-		if (promocion.esNulo()) {
+		if (promocion.esNula()) {
 			return ResponseEntity.notFound().build();
 		}
 
@@ -94,7 +94,7 @@ public class PromocionControlador {
 	public ResponseEntity<Promocion> editarPromocion(@PathVariable Long id,
 			@RequestPart("promocion") Promocion promocionDto, @RequestPart("imagen") MultipartFile imagen) {
 		Promocion promocion = promocionServicio.editar(id, promocionDto, imagen);
-		if (promocion.esNulo()) {
+		if (promocion.esNula()) {
 			return ResponseEntity.notFound().build();
 		}
 

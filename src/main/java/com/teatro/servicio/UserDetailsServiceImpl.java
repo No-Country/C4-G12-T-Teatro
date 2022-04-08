@@ -1,6 +1,6 @@
 package com.teatro.servicio;
 
-import java.util.Collection;
+/*import java.util.Collection;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,4 +28,4 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		
 		return new User(usuario.getEmail(), usuario.getContrasena(), authorities);
 	}
-}
+}*/

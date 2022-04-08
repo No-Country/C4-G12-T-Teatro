@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -21,6 +23,8 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +36,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "shows")
 public class Show {
 
 	@Id
@@ -50,6 +55,7 @@ public class Show {
 	private String urlImagen;
 
 	@NotNull
+	@JsonFormat(shape = Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	private LocalDateTime fechaShow;
 
 	@Min(0)
@@ -66,13 +72,16 @@ public class Show {
 	@JoinColumn(name = "categoria_id")
 	private Categoria categoria;
 
-	/*@ManyToOne
+	@ManyToOne
 	@JoinColumn(name = "sala_id")
-	private Sala sala;*/
+	private Sala sala;
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "shows")
 	@JsonBackReference
 	private List<Promocion> promociones;
+
+	@OneToMany(mappedBy = "show", cascade = CascadeType.ALL)
+	private List<Butaca> butacas;
 
 	public boolean esNulo() {
 		return false;

@@ -25,4 +25,6 @@ public abstract class Seccion {
 	@Column(unique = true)
 	private String nombre;
 	
+	
+	
 }
