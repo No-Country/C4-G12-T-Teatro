@@ -9,27 +9,27 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
 @Entity
-@DiscriminatorValue("porcentual")
+@DiscriminatorValue("Porcentual")
+@NoArgsConstructor
+@Data
 @EqualsAndHashCode(callSuper = true)
 public class PromocionPorcentual extends Promocion {
 
-	private float porcentajeAcobrar;
+	private float porcentajeACobrar;
 
 	public PromocionPorcentual(String titulo, String urlImagen, List<Show> shows, float descuento) {
 		super(null, titulo, urlImagen, true, shows);
-		this.porcentajeAcobrar = (float) ((100 - descuento) / 100.0);
+		this.porcentajeACobrar = (float) ((100 - descuento) / 100.0);
 	}
 
 	@Override
 	public float getPrecio() {
-		return super.getPrecio() * porcentajeAcobrar;
+		return super.getPrecio() * porcentajeACobrar;
 	}
 
 	@Override
-	public boolean esNulo() {
+	public boolean esNula() {
 		return false;
 	}
 }
