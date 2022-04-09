@@ -40,13 +40,14 @@ public class PromocionControlador {
 	private final PaginacionLinks paginacionLinks;
 
 	@GetMapping
-	public ResponseEntity<List<Promocion>> obtenerPromociones(@RequestParam("titulo") Optional<String> titulo,
+	public ResponseEntity<List<Promocion>> obtenerPromociones(
+			@RequestParam("titulo") Optional<String> titulo,
 			@RequestParam("precio") Optional<Float> precio,
-			@RequestParam("fechaShow") Optional<LocalDateTime> fechaShow,
-			@RequestParam("categoriaId") Optional<Long> categoriaId,
+			@RequestParam("fecha") Optional<String> fechaShow,
+			@RequestParam("categoria") Optional<String> categoriaNombre,
 			@PageableDefault(size = 20, page = 0) Pageable pageable, HttpServletRequest request) {
 
-		Page<Promocion> promociones = promocionServicio.buscarPorArgs(titulo, precio, fechaShow, categoriaId, pageable);
+		Page<Promocion> promociones = promocionServicio.buscarPorArgs(titulo, precio, fechaShow, categoriaNombre, pageable);
 
 		if (promociones.isEmpty()) {
 

@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 
 public abstract class Promocion {
@@ -39,7 +39,7 @@ public abstract class Promocion {
 	private String titulo;
 
 	private String urlImagen;
-
+    
 	private boolean activa = true;
 
 	@ManyToMany

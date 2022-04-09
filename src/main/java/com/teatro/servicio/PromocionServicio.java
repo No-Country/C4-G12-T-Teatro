@@ -1,6 +1,7 @@
 package com.teatro.servicio;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Optional;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -31,17 +32,21 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 
 	private final PromocionDtoConverter converter;
 	private final AlmacenamientoServicio almacenamientoServicio;
+	private final ShowServicio showServicio;
+	private final CategoriaServicio categoriaServicio;
 
 	@Autowired
 	public PromocionServicio(PromocionRepositorio repositorio, PromocionDtoConverter converter,
-			AlmacenamientoServicio almacenamientoServicio) {
+			AlmacenamientoServicio almacenamientoServicio, ShowServicio showServicio, CategoriaServicio categoriaServicio) {
 		super(repositorio);
 		this.converter = converter;
 		this.almacenamientoServicio = almacenamientoServicio;
+		this.showServicio = showServicio;
+		this.categoriaServicio = categoriaServicio;
 	}
 
-	public Page<Promocion> buscarPorArgs(Optional<String> titulo, Optional<Float> precio, Optional<LocalDateTime> fechaShow,
-			Optional<Long> categoriaId, Pageable pageable) {
+	public Page<Promocion> buscarPorArgs(Optional<String> titulo, Optional<Float> precio, Optional<String> fechaShowString,
+			Optional<String> categoriaNombre, Pageable pageable) {
 
 		Specification<Promocion> specNombrePromocion = new Specification<Promocion>() {
 			private static final long serialVersionUID = 6914475554810295752L;
@@ -74,8 +79,8 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 
 			@Override
 			public Predicate toPredicate(Root<Promocion> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-				if (categoriaId.isPresent()) {
-					return criteriaBuilder.equal(root.get("categoria.getId"), categoriaId.get());
+				if (categoriaNombre.isPresent()) {
+					return criteriaBuilder.equal(root.get("categoria").get("nombre"), categoriaNombre.get());
 				} else {
 					return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
 				}
@@ -87,8 +92,10 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 
 			@Override
 			public Predicate toPredicate(Root<Promocion> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-				if (fechaShow.isPresent()) {
-					return criteriaBuilder.greaterThanOrEqualTo(root.get("fechaShow"), fechaShow.get());
+				LocalDateTime fechaShow = LocalDateTime.parse(fechaShowString.get().FormateadorFecha.getFormateador());
+				
+				if (fechaShowString.isPresent()) {
+					return criteriaBuilder.greaterThanOrEqualTo(root.get("fechaShow"), fechaShow);
 				} else {
 					return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
 				}
@@ -100,7 +107,7 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 		return this.repositorio.findAll(todas, pageable);
 	}
 
-	public Promocion guardarImagenYagregarUrlImagen(CrearPromocionDto dto, MultipartFile imagen) {
+	public Promocion guardarImagenYagregarUrlImagen(CrearPromocionDto dto, MultipartFile file) {
 		String urlImagen = null;
 
 		if (!file.isEmpty()) {
@@ -115,11 +122,24 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 		return promocion;
 	}
 
-	public Promocion editar(Long id, CrearPromocionDto crearPromocionDto, MultipartFile imagen) {
+	public Promocion editar(Long id, CrearPromocionDto crearPromocionDto, MultipartFile file) {
 
 		Promocion promocion = buscarPorId(id).orElse(PromocionNula.construir());
 
 		if (!promocion.esNulo()) {
+			
+			switch (CrearPromocionDto.getTipo()) {
+			case "porcentual": {
+				
+				promocion = PromocionPorcentual(crearPromocionDto.getTitulo(),crearPromocionDto.getUrlImagen,
+						crearPromocionDto.getShowId().stream().map(id => servicioShow.buscarPorId(id))
+						.collect(Arrays.asList()), crearPromocionDto.getDescuento());
+			}
+			default:
+				throw new IllegalArgumentException("Valor inesperado: " + key);
+			}
+			
+			
 			promocion = Promocion.builder.titulo(crearPromocionDto.getTitulo()).precio(crearPromocionDto.getPrecio())
 					.fechaShow(crearPromocionDto.getFechaShow()).duracionMinShow(crearPromocionDto.getDuracionMinShow())
 					.descripcion(crearPromocionDto.getDescripcion())
