@@ -1,17 +1,17 @@
-package com.teatro.controller;
+package com.teatro.controlador;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.teatro.entity.Sala;
-import com.teatro.service.SalaService;
+import com.teatro.modelo.Sala;
+import com.teatro.servicio.SalaServicio;
 
 @RestController
 @RequestMapping("/sala")
-public class SalaController {
+public class SalaControlador {
 
 	@Autowired
-	private SalaService salaService;
+	private SalaServicio salaService;
 
 	@GetMapping
 	public Iterable<Sala> listar() {

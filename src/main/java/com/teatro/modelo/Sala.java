@@ -1,4 +1,4 @@
-package com.teatro.entity;
+package com.teatro.modelo;
 
 import java.util.Set;
 
