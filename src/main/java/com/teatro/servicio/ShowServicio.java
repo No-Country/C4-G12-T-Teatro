@@ -23,6 +23,7 @@ import com.teatro.modelo.objetonulo.ShowNulo;
 import com.teatro.repositorio.ShowRepositorio;
 import com.teatro.servicio.base.BaseServicio;
 import com.teatro.util.converter.ShowDtoConverter;
+import com.teatro.util.formateador.FormateadorFecha;
 
 @Service
 public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
@@ -90,10 +91,8 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 
 			@Override
 			public Predicate toPredicate(Root<Show> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-				if (fechaShowString.isPresent()) {
-					
-					LocalDateTime fechaShow = LocalDateTime.parse(fechaShowString.get(),FormateadorFecha.formateador);
-					log.info(fechaShow.toString());
+				if (fechaShowString.isPresent()) {					
+					LocalDateTime fechaShow = LocalDateTime.parse(fechaShowString.get(),FormateadorFecha.getFormateador());
 					return criteriaBuilder.greaterThanOrEqualTo(root.get("fechaShow"), fechaShow);
 				} else {
 					return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
@@ -149,4 +148,3 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 			return show;
 	}
 }
-
