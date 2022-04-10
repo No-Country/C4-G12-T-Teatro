@@ -12,10 +12,7 @@ import javax.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-<<<<<<< HEAD
-=======
 import org.springframework.data.jpa.domain.Specification;
->>>>>>> refs/remotes/origin/Elian
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
@@ -23,9 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import com.teatro.controlador.FicheroControlador;
 import com.teatro.dto.show.CrearPromocionDto;
 import com.teatro.modelo.Promocion;
-import com.teatro.modelo.Show;
 import com.teatro.modelo.objetonulo.PromocionNula;
-import com.teatro.modelo.objetonulo.ShowNulo;
 import com.teatro.repositorio.PromocionRepositorio;
 import com.teatro.servicio.base.BaseServicio;
 import com.teatro.util.converter.PromocionDtoConverter;
@@ -40,7 +35,8 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 
 	@Autowired
 	public PromocionServicio(PromocionRepositorio repositorio, PromocionDtoConverter converter,
-			AlmacenamientoServicio almacenamientoServicio, ShowServicio showServicio, CategoriaServicio categoriaServicio) {
+			AlmacenamientoServicio almacenamientoServicio, ShowServicio showServicio,
+			CategoriaServicio categoriaServicio) {
 		super(repositorio);
 		this.converter = converter;
 		this.almacenamientoServicio = almacenamientoServicio;
@@ -48,14 +44,15 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 		this.categoriaServicio = categoriaServicio;
 	}
 
-	public Page<Promocion> buscarPorArgs(Optional<String> titulo, Optional<Float> precio, Optional<String> fechaShowString,
-			Optional<String> categoriaNombre, Pageable pageable) {
+	public Page<Promocion> buscarPorArgs(Optional<String> titulo, Optional<Float> precio,
+			Optional<String> fechaShowString, Optional<String> categoriaNombre, Pageable pageable) {
 
 		Specification<Promocion> specNombrePromocion = new Specification<Promocion>() {
 			private static final long serialVersionUID = 6914475554810295752L;
 
 			@Override
-			public Predicate toPredicate(Root<Promocion> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+			public Predicate toPredicate(Root<Promocion> root, CriteriaQuery<?> query,
+					CriteriaBuilder criteriaBuilder) {
 				if (titulo.isPresent()) {
 					return criteriaBuilder.like(criteriaBuilder.lower(root.get("titulo")), "%" + titulo.get() + "%");
 				} else {
@@ -68,7 +65,8 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 			private static final long serialVersionUID = 8340953606260106235L;
 
 			@Override
-			public Predicate toPredicate(Root<Promocion> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+			public Predicate toPredicate(Root<Promocion> root, CriteriaQuery<?> query,
+					CriteriaBuilder criteriaBuilder) {
 				if (precio.isPresent()) {
 					return criteriaBuilder.lessThanOrEqualTo(root.get("precio"), precio.get());
 				} else {
@@ -81,7 +79,8 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Predicate toPredicate(Root<Promocion> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+			public Predicate toPredicate(Root<Promocion> root, CriteriaQuery<?> query,
+					CriteriaBuilder criteriaBuilder) {
 				if (categoriaNombre.isPresent()) {
 					return criteriaBuilder.equal(root.get("categoria").get("nombre"), categoriaNombre.get());
 				} else {
@@ -94,9 +93,10 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Predicate toPredicate(Root<Promocion> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+			public Predicate toPredicate(Root<Promocion> root, CriteriaQuery<?> query,
+					CriteriaBuilder criteriaBuilder) {
 				LocalDateTime fechaShow = LocalDateTime.parse(fechaShowString.get().FormateadorFecha.getFormateador());
-				
+
 				if (fechaShowString.isPresent()) {
 					return criteriaBuilder.greaterThanOrEqualTo(root.get("fechaShow"), fechaShow);
 				} else {
@@ -105,7 +105,8 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 			}
 		};
 
-		Specification<Promocion> todas = specNombrePromocion.and(specPrecioMenorQue).and(specDeCategoria).and(specFechaMayorQue);
+		Specification<Promocion> todas = specNombrePromocion.and(specPrecioMenorQue).and(specDeCategoria)
+				.and(specFechaMayorQue);
 
 		return this.repositorio.findAll(todas, pageable);
 	}
@@ -141,17 +142,6 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 			default:
 				throw new IllegalArgumentException("Valor inesperado: " + key);
 			}
-			
-			
-			promocion = Promocion.builder.titulo(crearPromocionDto.getTitulo()).precio(crearPromocionDto.getPrecio())
-					.fechaShow(crearPromocionDto.getFechaShow()).duracionMinShow(crearPromocionDto.getDuracionMinShow())
-					.descripcion(crearPromocionDto.getDescripcion())
-					.categoria(servicioCategoria.buscarPorId(crearPromocionDto.getCategoriaId()))
-					.sala(servicioSala.buscarPorId(crearPromocionDto.getSalaId()))
-					.promociones(crearPromocionDto.getPromocionId().stream()
-					.map(id -> servicioPromocion.buscarPorId(id))
-					.collect(Arrays.asList()))
-					.build();
 
 			if (!file.isEmpty()) {
 				String imagen = almacenamientoServicio.store(file);
