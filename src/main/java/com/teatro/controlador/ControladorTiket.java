@@ -1,5 +1,7 @@
 package com.teatro.controlador;
 import java.util.List;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,19 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.teatro.modelo.Tiket;
 import com.teatro.servicio.TiketServicio;
-
+@RequiredArgsConstructor
 @RestController
 public class ControladorTiket {
 
-	
-	
-    @Autowired
-    private  TiketServicio tiketService;
+
+    private final TiketServicio tiketService;
 
     
     @PostMapping("/tiket/new")
     public ResponseEntity<?>  crear(@RequestBody Tiket tiketNuevo){
-    	tiketService.crear(tiketNuevo);
+    	tiketService.guardar(tiketNuevo);
     	return  new ResponseEntity<>(HttpStatus.CREATED) ;
     }
     
@@ -31,7 +31,7 @@ public class ControladorTiket {
     @GetMapping("/tiket")
     @ResponseBody
     public List<Tiket>tiket(){
-        return tiketService.verTikets();
+        return tiketService.buscarTodos();
 
     }
 

@@ -10,6 +10,8 @@ import com.teatro.servicio.base.BaseServicio;
 @Service
 public class TiketServicio extends BaseServicio<Tiket, Long, TiketRepositorio> {
 
+
+
 	@Autowired
 	public TiketServicio(TiketRepositorio repositorio) {
 		super(repositorio);
