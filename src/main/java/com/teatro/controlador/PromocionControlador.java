@@ -1,6 +1,5 @@
 package com.teatro.controlador;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.teatro.dto.show.CrearPromocionDto;
 import com.teatro.modelo.Promocion;
 import com.teatro.modelo.objetonulo.PromocionNula;
 import com.teatro.servicio.PromocionServicio;
@@ -40,14 +40,15 @@ public class PromocionControlador {
 	private final PaginacionLinks paginacionLinks;
 
 	@GetMapping
-	public ResponseEntity<List<Promocion>> obtenerPromociones(@RequestParam("titulo") Optional<String> titulo,
+	public ResponseEntity<List<Promocion>> obtenerPromociones(
+			@RequestParam("titulo") Optional<String> titulo,
 			@RequestParam("precio") Optional<Float> precio,
-			@RequestParam("fechaShow") Optional<LocalDateTime> fechaShow,
-			@RequestParam("categoriaId") Optional<Long> categoriaId,
+			@RequestParam("fecha") Optional<String> fechaShow,
+			@RequestParam("categoria") Optional<String> categoriaNombre,
 			@PageableDefault(size = 20, page = 0) Pageable pageable, HttpServletRequest request) {
 
-		Page<Promocion> promociones = promocionServicio.buscarPorArgs(titulo, precio, fechaShow, categoriaId, pageable);
-		
+		Page<Promocion> promociones = promocionServicio.buscarPorArgs(titulo, precio, fechaShow, categoriaNombre, pageable);
+
 		if (promociones.isEmpty()) {
 
 			return ResponseEntity.notFound().build();
@@ -72,7 +73,7 @@ public class PromocionControlador {
 	}
 
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<Promocion> crearPromocion(@RequestPart("promocion") Promocion promocionDto,
+	public ResponseEntity<Promocion> crearPromocion(@RequestPart("promocion") CrearPromocionDto promocionDto,
 			@RequestPart("imagen") MultipartFile imagen) {
 		Promocion promocion = promocionServicio.guardarImagenYagregarUrlImagen(promocionDto, imagen);
 		return ResponseEntity.status(HttpStatus.CREATED).body(promocionServicio.guardar(promocion));
@@ -92,7 +93,7 @@ public class PromocionControlador {
 
 	@PutMapping(name = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Promocion> editarPromocion(@PathVariable Long id,
-			@RequestPart("promocion") Promocion promocionDto, @RequestPart("imagen") MultipartFile imagen) {
+			@RequestPart("promocion") CrearPromocionDto promocionDto, @RequestPart("imagen") MultipartFile imagen) {
 		Promocion promocion = promocionServicio.editar(id, promocionDto, imagen);
 		if (promocion.esNula()) {
 			return ResponseEntity.notFound().build();

@@ -19,6 +19,7 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,7 +27,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+
 public abstract class Promocion {
 
 	@Id
@@ -38,7 +41,7 @@ public abstract class Promocion {
 	private String titulo;
 
 	private String urlImagen;
-
+    
 	private boolean activa = true;
 
 	@ManyToMany()
