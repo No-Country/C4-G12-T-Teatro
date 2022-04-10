@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.teatro.modelo.Tiket;
 
+import java.io.Serializable;
+
 @Repository
-public interface TiketRepositorio  extends JpaRepository<Tiket,Long>{
+public interface TiketRepositorio  extends JpaRepository<Tiket, Long> ,Serializable{
 
 }
