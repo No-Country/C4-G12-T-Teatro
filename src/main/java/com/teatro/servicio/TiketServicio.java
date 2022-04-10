@@ -1,33 +1,17 @@
 package com.teatro.servicio;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.teatro.modelo.Tiket;
 import com.teatro.repositorio.TiketRepositorio;
+import com.teatro.servicio.base.BaseServicio;
 
 @Service
-public class TiketServicio implements ITiketServicio {
+public class TiketServicio extends BaseServicio<Tiket, Long, TiketRepositorio> {
 
-	
-	
 	@Autowired
-	public TiketRepositorio tikets;
-
-	    @Override
-	    public List<Tiket> verTikets() {
-	        return tikets.findAll();
-	    }
-
-	    @Override
-	    public void crear(Tiket tiket) {
-	  	tikets.save(tiket);
-	    	
+	public TiketServicio(TiketRepositorio repositorio) {
+		super(repositorio);
 	}
-	
-	
-	
-
 }
