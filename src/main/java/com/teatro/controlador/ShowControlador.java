@@ -1,6 +1,5 @@
 package com.teatro.controlador;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,12 +39,13 @@ public class ShowControlador {
 	private final ShowServicio showServicio;
 	private final PaginacionLinks paginacionLinks;
 	@GetMapping
-	public ResponseEntity<List<Show>> obtenerShows(@RequestParam("titulo") Optional<String> titulo,
-			@RequestParam("precio") Optional<Float> precio,
-			@RequestParam("fechaShow") Optional<LocalDateTime> fechaShow,
-			@RequestParam("categoriaId") Optional<Long> categoriaId,
+	public ResponseEntity<List<Show>> obtenerShows(
+			@RequestParam("titulo") Optional<String> titulo,
+			@RequestParam("precio") Optional<Float> precio, 
+			@RequestParam("fechaShow") Optional<String> fechaShow,
+			@RequestParam("categoria") Optional<String> categoriaNombre,
 			@PageableDefault(size = 20, page = 0) Pageable pageable, HttpServletRequest request) {
-		Page<Show> shows = showServicio.buscarPorArgs(titulo, precio, fechaShow, categoriaId, pageable);
+		Page<Show> shows = showServicio.buscarPorArgs(titulo, precio, fechaShow, categoriaNombre, pageable);
 
 		if (shows.isEmpty()) {
 			return ResponseEntity.notFound().build();
@@ -68,16 +68,20 @@ public class ShowControlador {
 	}
 
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<Show> nuevoShow(@RequestPart("show") CrearShowDto crearShowDto,
-			@RequestPart("file") MultipartFile file) {
-		Show show = showServicio.guardarImagenYAgregarUrlImagen(crearShowDto, file);
+	public ResponseEntity<Show> nuevoShow(
+			@RequestPart("show") CrearShowDto crearShowDto,
+			@RequestPart("imagen") MultipartFile imagen) {
+
+		Show show = showServicio.guardarImagenYAgregarUrlImagen(crearShowDto, imagen);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(showServicio.guardar(show));
 	}
 
 	@PutMapping(name = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<Show> editarShow(@PathVariable Long id, @RequestPart(name = "show") CrearShowDto crearShowDto,
-			@RequestPart("file") MultipartFile file) {
+	public ResponseEntity<Show> editarShow(
+			@PathVariable Long id, 
+			@RequestPart(name = "show") CrearShowDto crearShowDto,
+			@RequestPart("imagen") MultipartFile file) {
 		Show show = showServicio.editar(id, crearShowDto, file);
 
 		if (show.esNulo())

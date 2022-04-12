@@ -19,7 +19,6 @@ public class CrearShowDto {
 	private LocalDateTime fechaShow;
 	private int duracionMinShow;
 	private String descripcion;
-	private Long categoriaId;
-	private Long salaId;
-	private ArrayList<Long> promocionId;
+	//private Long categoriaId;
+	//private Long salaId;
 }

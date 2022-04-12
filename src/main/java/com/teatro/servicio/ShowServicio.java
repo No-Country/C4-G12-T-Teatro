@@ -23,23 +23,29 @@ import com.teatro.modelo.objetonulo.ShowNulo;
 import com.teatro.repositorio.ShowRepositorio;
 import com.teatro.servicio.base.BaseServicio;
 import com.teatro.util.converter.ShowDtoConverter;
+import com.teatro.util.formateador.FormateadorFecha;
 
 @Service
 public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 
 	private final ShowDtoConverter converter;
 	private final AlmacenamientoServicio almacenamientoServicio;
+	private final CategoriaServicio categoriaServicio;
+	private final SalaServicio salaServicio;
 
 	@Autowired
 	public ShowServicio(ShowRepositorio repositorio, ShowDtoConverter converter,
-			AlmacenamientoServicio almacenamientoServicio) {
+			AlmacenamientoServicio almacenamientoServicio, CategoriaServicio categoriaServicio,
+			SalaServicio salaServicio) {
 		super(repositorio);
 		this.converter = converter;
 		this.almacenamientoServicio = almacenamientoServicio;
+		this.salaServicio = salaServicio;
+		this.categoriaServicio = categoriaServicio;
 	}
 
-	public Page<Show> buscarPorArgs(Optional<String> titulo, Optional<Float> precio, Optional<LocalDateTime> fechaShow,
-			Optional<Long> categoriaId, Pageable pageable) {
+	public Page<Show> buscarPorArgs(Optional<String> titulo, Optional<Float> precio, Optional<String> fechaShowString,
+			Optional<String> categoriaNombre, Pageable pageable) {
 
 		Specification<Show> specNombreShow = new Specification<Show>() {
 			private static final long serialVersionUID = 6914475554810295752L;
@@ -72,8 +78,8 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 
 			@Override
 			public Predicate toPredicate(Root<Show> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-				if (categoriaId.isPresent()) {
-					return criteriaBuilder.equal(root.get("categoria.getId"), categoriaId.get());
+				if (categoriaNombre.isPresent()) {
+					return criteriaBuilder.like(criteriaBuilder.lower(root.get("categoria").get("nombre")), "%" + categoriaNombre.get() + "%");
 				} else {
 					return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
 				}
@@ -85,8 +91,9 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 
 			@Override
 			public Predicate toPredicate(Root<Show> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-				if (fechaShow.isPresent()) {
-					return criteriaBuilder.greaterThanOrEqualTo(root.get("fechaShow"), fechaShow.get());
+				if (fechaShowString.isPresent()) {					
+					LocalDateTime fechaShow = LocalDateTime.parse(fechaShowString.get(),FormateadorFecha.getFormateador());
+					return criteriaBuilder.greaterThanOrEqualTo(root.get("fechaShow"), fechaShow);
 				} else {
 					return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
 				}
@@ -117,17 +124,19 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 		Show show = buscarPorId(id).orElse(ShowNulo.construir());
 
 		if (!show.esNulo()) {
-			show = Show.builder().titulo(crearShowDto.getTitulo()).precio(crearShowDto.getPrecio())
-					.fechaShow(crearShowDto.getFechaShow()).duracionMinShow(crearShowDto.getDuracionMinShow())
+			show = Show.builder().titulo(crearShowDto.getTitulo())
+					.precio(crearShowDto.getPrecio())
+					.fechaShow(crearShowDto.getFechaShow())
+					.duracionMinShow(crearShowDto.getDuracionMinShow())
 					.descripcion(crearShowDto.getDescripcion())
-					.categoria(servicioCategoria.buscarPorId(crearShowDto.getCategoriaId()))
-					.sala(servicioSala.buscarPorId(crearShowDto.getSalaId()))
-					.promociones(crearShowDto.getPromocionId().stream()
-					.map(id -> servicioPromocion.buscarPorId(id))
-					.collect(Arrays.asList()))
+					.categoria(categoriaServicio.buscarPorId(crearShowDto.getCategoriaId())
+												.orElseThrow(CategoriaNoEncontradaException::new))
+					.sala(salaServicio.buscarPorId(crearShowDto.getSalaId())
+										.orElseThrow(SalaNoEncontradaException::new))
 					.build();
 
 			if (!file.isEmpty()) {
+				almacenamientoServicio.delete(show.getUrlImagen());
 				String imagen = almacenamientoServicio.store(file);
 				String urlImagen = MvcUriComponentsBuilder
 						.fromMethodName(FicheroControlador.class, "serveFile", imagen, null).build().toUriString();
@@ -138,5 +147,4 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 		} else
 			return show;
 	}
-
 }
