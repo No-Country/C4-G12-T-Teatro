@@ -1,5 +1,6 @@
 package com.teatro.modelo;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,8 +37,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Usuario {
-	
+public class Usuario implements Serializable{
+
+	private static final long serialVersionUID = -3415330562513402939L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

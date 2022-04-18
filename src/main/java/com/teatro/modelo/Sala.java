@@ -1,5 +1,7 @@
 package com.teatro.modelo;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,7 +19,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Sala {
+public class Sala implements Serializable{
+
+	private static final long serialVersionUID = 3277164960109294419L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

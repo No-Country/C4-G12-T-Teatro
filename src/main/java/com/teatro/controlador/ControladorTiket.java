@@ -22,7 +22,7 @@ public class ControladorTiket {
     private  TiketServicio tiketService;
 
     
-    @PostMapping("/tiket/new")
+    /*@PostMapping("/tiket/new")
     public ResponseEntity<?>  crear(@RequestBody Tiket tiketNuevo){
     	tiketService.crear(tiketNuevo);
     	return  new ResponseEntity<>(HttpStatus.CREATED) ;
@@ -34,7 +34,7 @@ public class ControladorTiket {
     public List<Tiket>tiket(){
         return tiketService.verTikets();
 
-    }
+    }*/
 
 	
 	
