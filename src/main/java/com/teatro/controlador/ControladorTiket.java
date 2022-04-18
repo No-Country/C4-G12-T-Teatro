@@ -22,7 +22,7 @@ public class ControladorTiket {
 
     
     @PostMapping("/tiket/new")
-    public ResponseEntity<?>  crear(@RequestBody Tiket tiketNuevo){
+    public ResponseEntity<?>  crear(@RequestBody Tiket tiketNuevo ){
     	tiketService.guardar(tiketNuevo);
     	return  new ResponseEntity<>(HttpStatus.CREATED) ;
     }
