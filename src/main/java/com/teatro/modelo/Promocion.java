@@ -75,4 +75,16 @@ public abstract class Promocion implements Serializable{
 	public String getCategoria() {
 		return shows.get(0).getCategoria().getNombre();
 	}
+
+	public boolean contieneA(Show show) {
+		return this.shows.contains(show);
+	}
+
+	public void agregarA(Show show) {
+		this.shows.add(show);
+	}
+
+	public void eliminarA(Show show) {
+		this.shows.remove(show);
+	}
 }

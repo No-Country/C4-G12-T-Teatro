@@ -22,7 +22,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -57,7 +56,6 @@ public class Usuario implements Serializable{
 	private String email;
 	
 	@NotBlank
-	@Length(min = 5, max = 15)
 	private String contrasena;
 	
 	private String urlAvatar;

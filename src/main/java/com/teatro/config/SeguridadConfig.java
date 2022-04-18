@@ -53,7 +53,7 @@ public class SeguridadConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/swagger-ui/**").permitAll()
 				.antMatchers("/login/**").permitAll()
 				.antMatchers("/h2-console/**").permitAll()
-			.anyRequest().permitAll();
+			.anyRequest().authenticated();
 		
 		http.addFilter(autenticacionFiltro);		
 		http.addFilterBefore(autorizacionFiltro, UsernamePasswordAuthenticationFilter.class);

@@ -1,4 +1,4 @@
-package com.teatro.dto.show;
+package com.teatro.dto.promocion;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,6 +21,16 @@ public class CrearPromocionDto {
 	private String descripcion;
 	private Long categoriaId;
 	private Long salaId;
-	private ArrayList<Long> showId;
+	private ArrayList<ShowIdDto> showsShowId;
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class ShowIdDto {
+
+		private Long id;
+
+	}
 
 }
