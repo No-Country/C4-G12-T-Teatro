@@ -1,5 +1,6 @@
 package com.teatro.modelo;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,7 +20,6 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -30,7 +30,9 @@ import lombok.NoArgsConstructor;
 
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 
-public abstract class Promocion {
+public abstract class Promocion implements Serializable{
+
+	private static final long serialVersionUID = -1360819303963251873L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

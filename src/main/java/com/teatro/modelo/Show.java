@@ -1,5 +1,6 @@
 package com.teatro.modelo;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -37,7 +38,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Table(name = "shows")
-public class Show {
+public class Show implements Serializable{
+
+	private static final long serialVersionUID = -5984187142452274435L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

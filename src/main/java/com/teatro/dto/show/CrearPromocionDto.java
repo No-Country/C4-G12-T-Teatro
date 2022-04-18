@@ -22,4 +22,5 @@ public class CrearPromocionDto {
 	private Long categoriaId;
 	private Long salaId;
 	private ArrayList<Long> showId;
+
 }

@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.teatro.modelo.Usuario;
+
 import lombok.RequiredArgsConstructor;
 
 @Service("UserDetailsService")
