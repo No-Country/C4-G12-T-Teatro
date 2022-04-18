@@ -1,6 +1,6 @@
 package com.teatro.seguridad;
 
-/*import java.util.Date;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,7 +17,8 @@ import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
-
+import com.teatro.modelo.Usuario;
+import com.teatro.util.enumerados.RolUsuario;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -93,4 +94,4 @@ public class JwtProveedor {
 			log.info("Token JWT no soportado: " + e.getMessage());
 		}
 	}
-}*/
+}
