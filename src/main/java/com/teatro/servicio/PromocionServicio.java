@@ -24,6 +24,8 @@ import com.teatro.modelo.objetonulo.PromocionNula;
 import com.teatro.repositorio.PromocionRepositorio;
 import com.teatro.servicio.base.BaseServicio;
 import com.teatro.util.converter.PromocionDtoConverter;
+import com.teatro.util.formateador.FormateadorFecha;
+>>>>>>> refs/heads/Practica
 
 @Service
 public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRepositorio> {
@@ -32,6 +34,7 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 	private final AlmacenamientoServicio almacenamientoServicio;
 	private final ShowServicio showServicio;
 	private final CategoriaServicio categoriaServicio;
+
 
 	@Autowired
 	public PromocionServicio(PromocionRepositorio repositorio, PromocionDtoConverter converter,
@@ -44,10 +47,11 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 		this.categoriaServicio = categoriaServicio;
 	}
 
-	public Page<Promocion> buscarPorArgs(Optional<String> titulo, Optional<Float> precio,
-			Optional<String> fechaShowString, Optional<String> categoriaNombre, Pageable pageable) {
 
-		Specification<Promocion> specNombrePromocion = new Specification<Promocion>() {
+	public Page<Promocion> buscarPorArgs(Optional<String> titulo, Optional<String> fechaShowString,
+			Optional<String> categoriaNombre, Pageable pageable) {
+
+		Specification<Promocion> specNombreShow = new Specification<Promocion>() {
 			private static final long serialVersionUID = 6914475554810295752L;
 
 			@Override
@@ -61,20 +65,6 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 			}
 		};
 
-		Specification<Promocion> specPrecioMenorQue = new Specification<Promocion>() {
-			private static final long serialVersionUID = 8340953606260106235L;
-
-			@Override
-			public Predicate toPredicate(Root<Promocion> root, CriteriaQuery<?> query,
-					CriteriaBuilder criteriaBuilder) {
-				if (precio.isPresent()) {
-					return criteriaBuilder.lessThanOrEqualTo(root.get("precio"), precio.get());
-				} else {
-					return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
-				}
-			}
-		};
-
 		Specification<Promocion> specDeCategoria = new Specification<Promocion>() {
 			private static final long serialVersionUID = 1L;
 
@@ -82,7 +72,8 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 			public Predicate toPredicate(Root<Promocion> root, CriteriaQuery<?> query,
 					CriteriaBuilder criteriaBuilder) {
 				if (categoriaNombre.isPresent()) {
-					return criteriaBuilder.equal(root.get("categoria").get("nombre"), categoriaNombre.get());
+					return criteriaBuilder.like(criteriaBuilder.lower(root.get("categoria").get("nombre")),
+							"%" + categoriaNombre.get() + "%");
 				} else {
 					return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
 				}
@@ -95,9 +86,8 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 			@Override
 			public Predicate toPredicate(Root<Promocion> root, CriteriaQuery<?> query,
 					CriteriaBuilder criteriaBuilder) {
-				LocalDateTime fechaShow = LocalDateTime.parse(fechaShowString.get().FormateadorFecha.getFormateador());
-
 				if (fechaShowString.isPresent()) {
+					LocalDateTime fechaShow = LocalDateTime.parse(fechaShowString.get(), FormateadorFecha.formateador);
 					return criteriaBuilder.greaterThanOrEqualTo(root.get("fechaShow"), fechaShow);
 				} else {
 					return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
@@ -105,13 +95,12 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 			}
 		};
 
-		Specification<Promocion> todas = specNombrePromocion.and(specPrecioMenorQue).and(specDeCategoria)
-				.and(specFechaMayorQue);
+		Specification<Promocion> todas = specNombreShow.and(specDeCategoria).and(specFechaMayorQue);
 
 		return this.repositorio.findAll(todas, pageable);
 	}
 
-	public Promocion guardarImagenYagregarUrlImagen(CrearPromocionDto dto, MultipartFile file) {
+	public Promocion guardarImagenYagregarUrlImagen(CrearPromocionDto promocionDto, MultipartFile file) {
 		String urlImagen = null;
 
 		if (!file.isEmpty()) {
@@ -120,7 +109,7 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 					.build().toUriString();
 		}
 
-		Promocion promocion = converter.convertirCrearPromocionDtoAPromocion(dto);
+		Promocion promocion = converter.convertirCrearPromocionDtoAPromocion(promocionDto);
 		promocion.setUrlImagen(urlImagen);
 
 		return promocion;
@@ -130,7 +119,7 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 
 		Promocion promocion = buscarPorId(id).orElse(PromocionNula.construir());
 
-		if (!promocion.esNulo()) {
+		if (!promocion.esNula()) {
 			
 			switch (CrearPromocionDto.getTipo()) {
 			case "porcentual": {

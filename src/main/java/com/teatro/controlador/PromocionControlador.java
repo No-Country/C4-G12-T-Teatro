@@ -42,25 +42,20 @@ public class PromocionControlador {
 	@GetMapping
 	public ResponseEntity<List<Promocion>> obtenerPromociones(
 			@RequestParam("titulo") Optional<String> titulo,
-			@RequestParam("precio") Optional<Float> precio,
 			@RequestParam("fecha") Optional<String> fechaShow,
 			@RequestParam("categoria") Optional<String> categoriaNombre,
 			@PageableDefault(size = 20, page = 0) Pageable pageable, HttpServletRequest request) {
-
-		Page<Promocion> promociones = promocionServicio.buscarPorArgs(titulo, precio, fechaShow, categoriaNombre, pageable);
+		Page<Promocion> promociones = promocionServicio.buscarPorArgs(titulo, fechaShow, categoriaNombre, pageable);
 
 		if (promociones.isEmpty()) {
-
 			return ResponseEntity.notFound().build();
 		}
-
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(request.getRequestURL().toString());
 
 		return ResponseEntity.ok().header("link", paginacionLinks.crearLinkHeader(promociones, builder))
 				.body(promociones.getContent());
 	}
 
-	
 	@GetMapping("/{id}")
 	public ResponseEntity<Promocion> obtenerPromocion(@PathVariable Long id) {
 		Promocion promocion = promocionServicio.buscarPorId(id).orElse(PromocionNula.construir());

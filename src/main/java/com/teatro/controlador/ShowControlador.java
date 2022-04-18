@@ -69,6 +69,7 @@ public class ShowControlador {
 	}
 
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+
 	public ResponseEntity<Show> nuevoShow(
 			@RequestPart("show") CrearShowDto crearShowDto,
 			@RequestPart("imagen") MultipartFile imagen) {
