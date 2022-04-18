@@ -1,5 +1,6 @@
 package com.teatro.modelo;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,8 +27,12 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class Promocion {
+
+public abstract class Promocion implements Serializable{
+
+	private static final long serialVersionUID = -1360819303963251873L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +43,7 @@ public abstract class Promocion {
 	private String titulo;
 
 	private String urlImagen;
-
+    
 	private boolean activa = true;
 
 	@ManyToMany()
@@ -69,5 +74,17 @@ public abstract class Promocion {
 
 	public String getCategoria() {
 		return shows.get(0).getCategoria().getNombre();
+	}
+
+	public boolean contieneA(Show show) {
+		return this.shows.contains(show);
+	}
+
+	public void agregarA(Show show) {
+		this.shows.add(show);
+	}
+
+	public void eliminarA(Show show) {
+		this.shows.remove(show);
 	}
 }

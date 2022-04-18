@@ -1,5 +1,6 @@
 package com.teatro.modelo;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
@@ -14,8 +15,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class PromocionPorcentual extends Promocion {
+public class PromocionPorcentual extends Promocion implements Serializable{
 
+	private static final long serialVersionUID = 4206942871044160893L;
+	
 	private float porcentajeACobrar;
 
 	public PromocionPorcentual(String titulo, String urlImagen, List<Show> shows, float descuento) {
