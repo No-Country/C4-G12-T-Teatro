@@ -18,8 +18,4 @@ public class PromocionDtoConverter {
 	public Promocion convertirCrearPromocionDtoAPromocion(CrearPromocionDto promocionDto) {
 		return mapper.map(promocionDto, PromocionPorcentual.class);
 	}
-
-	public Promocion convertirCrearPromocionDtoAPromocion(CrearPromocionDto promocionDto) {
-		return mapper.map(promocionDto, PromocionPorcentual.class);
-	}
 }

@@ -76,7 +76,7 @@ public class Usuario {
 	private List<RolUsuario> roles;
 	
 	@OneToMany(mappedBy = "comprador")
-	private List<Ticket> compras;
+	private List<Tiket> compras;
 	
 	public boolean esNulo() {
 		return false;

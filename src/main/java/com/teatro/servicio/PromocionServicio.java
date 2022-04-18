@@ -25,7 +25,6 @@ import com.teatro.repositorio.PromocionRepositorio;
 import com.teatro.servicio.base.BaseServicio;
 import com.teatro.util.converter.PromocionDtoConverter;
 import com.teatro.util.formateador.FormateadorFecha;
->>>>>>> refs/heads/Practica
 
 @Service
 public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRepositorio> {
@@ -87,7 +86,7 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 			public Predicate toPredicate(Root<Promocion> root, CriteriaQuery<?> query,
 					CriteriaBuilder criteriaBuilder) {
 				if (fechaShowString.isPresent()) {
-					LocalDateTime fechaShow = LocalDateTime.parse(fechaShowString.get(), FormateadorFecha.formateador);
+					LocalDateTime fechaShow = LocalDateTime.parse(fechaShowString.get(), FormateadorFecha.getFormateador());
 					return criteriaBuilder.greaterThanOrEqualTo(root.get("fechaShow"), fechaShow);
 				} else {
 					return criteriaBuilder.isTrue(criteriaBuilder.literal(true));

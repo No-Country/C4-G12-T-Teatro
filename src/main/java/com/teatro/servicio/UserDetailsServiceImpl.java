@@ -1,6 +1,6 @@
 package com.teatro.servicio;
 
-/*import java.util.Collection;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import com.teatro.modelo.Usuario;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,4 +30,4 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		
 		return new User(usuario.getEmail(), usuario.getContrasena(), authorities);
 	}
-}*/
+}
