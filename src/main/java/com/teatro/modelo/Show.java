@@ -1,6 +1,8 @@
 package com.teatro.modelo;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -37,7 +39,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Table(name = "shows")
-public class Show {
+public class Show implements Serializable{
+
+	private static final long serialVersionUID = -5984187142452274435L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,7 +59,7 @@ public class Show {
 	private String urlImagen;
 
 	@NotNull
-	@JsonFormat(shape = Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+	@JsonFormat(shape = Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
 	private LocalDateTime fechaShow;
 
 	@Min(0)
@@ -68,9 +72,9 @@ public class Show {
 	@Builder.Default
 	private boolean activa = true;
 
-	/*@ManyToOne()
+	@ManyToOne()
 	@JoinColumn(name = "categoria_id")
-	private Categoria categoria;*/
+	private Categoria categoria;
 
 	@ManyToOne
 	@JoinColumn(name = "sala_id")
@@ -80,8 +84,9 @@ public class Show {
 	@JsonBackReference
 	private List<Promocion> promociones;
 
+	@Builder.Default
 	@OneToMany(mappedBy = "show", cascade = CascadeType.ALL)
-	private List<Butaca> butacas;
+	private List<Butaca> butacas = new ArrayList<>();
 
 	public boolean esNulo() {
 		return false;

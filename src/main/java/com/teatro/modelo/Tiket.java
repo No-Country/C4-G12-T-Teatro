@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 public class Tiket implements Serializable {
-	
+
 	private static final long serialVersionUID = 7821507459652032840L;
 
 	@Id
@@ -40,11 +40,10 @@ public class Tiket implements Serializable {
 
 	@Column(name = "fecha_compra")
 	@CreatedDate
-
 	LocalDate local;
 
 	@Column(name = "activa")
-	private boolean activa;
+	private boolean activa = true;
 
 	@Size(max = 100)
 	@Column(name = "descripcion")
@@ -53,7 +52,6 @@ public class Tiket implements Serializable {
 	@NotNull
 	@Min(1)
 	@Max(100000)
-	@Column
 	private float precio;
 
 	@NotNull
@@ -64,12 +62,11 @@ public class Tiket implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "show_id")
 	private Show show;
+
+	@ManyToOne
+	@JoinColumn(name= "usuario_id")
+	private Usuario comprador;
 	
-	@ManyToMany()
+	@ManyToMany
 	private List<Butaca> butacas;
-
-	/*@ManyToOne
-	@JoinColumn(name= "usuario_id");
-	private Usuario usuario;*/
-
 }

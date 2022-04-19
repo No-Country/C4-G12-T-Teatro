@@ -17,8 +17,9 @@ public class ShowDtoConverter {
 	public Show convertirCrearShowDtoAShow(CrearShowDto dto) {
 		return modelMapper.map(dto, Show.class);
 	}
-
-	public CrearShowDto convertirShowACrearShowDto(Show show) {
-		return modelMapper.map(show, CrearShowDto.class);
+	
+	public Show convertirCrearShowDtoAShow(CrearShowDto dto, Show show) {
+		modelMapper.map(dto, show);
+		return show;
 	}
 }

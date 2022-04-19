@@ -1,4 +1,4 @@
-/*package com.teatro.filtro;
+package com.teatro.filtro;
 
 import java.io.IOException;
 
@@ -63,5 +63,4 @@ public class AutorizacionFiltro extends OncePerRequestFilter {
 
 		return null;
 	}
-
-}*/
+}
