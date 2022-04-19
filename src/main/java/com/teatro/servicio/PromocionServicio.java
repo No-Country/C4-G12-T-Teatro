@@ -12,10 +12,7 @@ import javax.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-<<<<<<< HEAD
-=======
 import org.springframework.data.jpa.domain.Specification;
->>>>>>> refs/remotes/origin/Elian
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
@@ -23,9 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import com.teatro.controlador.FicheroControlador;
 import com.teatro.dto.show.CrearPromocionDto;
 import com.teatro.modelo.Promocion;
-import com.teatro.modelo.Show;
 import com.teatro.modelo.objetonulo.PromocionNula;
-import com.teatro.modelo.objetonulo.ShowNulo;
 import com.teatro.repositorio.PromocionRepositorio;
 import com.teatro.servicio.base.BaseServicio;
 import com.teatro.util.converter.PromocionDtoConverter;
@@ -36,16 +31,16 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 	private final PromocionDtoConverter converter;
 	private final AlmacenamientoServicio almacenamientoServicio;
 	private final ShowServicio showServicio;
-	private final CategoriaServicio categoriaServicio;
+	//private final CategoriaServicio categoriaServicio;
 
 	@Autowired
 	public PromocionServicio(PromocionRepositorio repositorio, PromocionDtoConverter converter,
-			AlmacenamientoServicio almacenamientoServicio, ShowServicio showServicio, CategoriaServicio categoriaServicio) {
+			AlmacenamientoServicio almacenamientoServicio, ShowServicio showServicio) {
 		super(repositorio);
 		this.converter = converter;
 		this.almacenamientoServicio = almacenamientoServicio;
 		this.showServicio = showServicio;
-		this.categoriaServicio = categoriaServicio;
+		//this.categoriaServicio = categoriaServicio;
 	}
 
 	public Page<Promocion> buscarPorArgs(Optional<String> titulo, Optional<Float> precio, Optional<String> fechaShowString,

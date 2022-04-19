@@ -68,9 +68,9 @@ public class Show {
 	@Builder.Default
 	private boolean activa = true;
 
-	@ManyToOne()
+	/*@ManyToOne()
 	@JoinColumn(name = "categoria_id")
-	private Categoria categoria;
+	private Categoria categoria;*/
 
 	@ManyToOne
 	@JoinColumn(name = "sala_id")

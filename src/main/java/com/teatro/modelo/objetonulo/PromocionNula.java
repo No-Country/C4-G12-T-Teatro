@@ -5,7 +5,7 @@ import com.teatro.modelo.Promocion;
 public class PromocionNula extends Promocion{
 
 	@Override
-	public boolean esNulo() {
+	public boolean esNula() {
 		return true;
 	}
 

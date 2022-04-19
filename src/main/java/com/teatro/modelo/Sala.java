@@ -1,5 +1,6 @@
 package com.teatro.modelo;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -7,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -19,7 +19,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "sala")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,12 +36,5 @@ public class Sala {
 	private boolean estado = true;
 
 	@OneToMany(mappedBy = "sala")
-	private Show show;
-
-	@OneToMany(mappedBy = "sala")
-	private Set<Butaca> butaca;
-
-	@OneToMany(mappedBy = "sala")
-	private Ticket ticket;
-
+	private List<Show> show;
 }

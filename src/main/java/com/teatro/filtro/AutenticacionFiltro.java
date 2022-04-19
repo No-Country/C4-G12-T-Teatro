@@ -1,4 +1,5 @@
 package com.teatro.filtro;
+/*package com.teatro.filtro;
 
 import java.io.IOException;
 
@@ -28,4 +29,4 @@ public class AutenticacionFiltro extends UsernamePasswordAuthenticationFilter {
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		new ObjectMapper().writeValue(response.getOutputStream(), token);
 	}
-}
+}*/

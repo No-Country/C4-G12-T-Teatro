@@ -6,8 +6,12 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -46,8 +50,10 @@ public class ShowControlador {
 			@RequestParam("fechaShow") Optional<String> fechaShow,
 			@RequestParam("categoria") Optional<String> categoriaNombre,
 			@PageableDefault(size = 20, page = 0) Pageable pageable, HttpServletRequest request) {
+		
+		//pageable= PageRequest
+		System.out.println(pageable.getSort().toString()); 
 		Page<Show> shows = showServicio.buscarPorArgs(titulo, precio, fechaShow, categoriaNombre, pageable);
-
 		if (shows.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}

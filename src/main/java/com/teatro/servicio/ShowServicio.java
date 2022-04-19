@@ -10,7 +10,9 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,18 +34,18 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 
 	private final ShowDtoConverter converter;
 	private final AlmacenamientoServicio almacenamientoServicio;
-	private final CategoriaServicio categoriaServicio;
+	//private final CategoriaServicio categoriaServicio;
 	private final SalaServicio salaServicio;
 
 	@Autowired
 	public ShowServicio(ShowRepositorio repositorio, ShowDtoConverter converter,
-			AlmacenamientoServicio almacenamientoServicio, CategoriaServicio categoriaServicio,
+			AlmacenamientoServicio almacenamientoServicio,
 			SalaServicio salaServicio) {
 		super(repositorio);
 		this.converter = converter;
 		this.almacenamientoServicio = almacenamientoServicio;
 		this.salaServicio = salaServicio;
-		this.categoriaServicio = categoriaServicio;
+		//this.categoriaServicio = categoriaServicio;
 	}
 
 	public Page<Show> buscarPorArgs(Optional<String> titulo, Optional<Float> precio, Optional<String> fechaShowString,
@@ -93,7 +95,7 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 
 			@Override
 			public Predicate toPredicate(Root<Show> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-				if (fechaShowString.isPresent()) {					
+				if (fechaShowString.isPresent()) {
 					LocalDateTime fechaShow = LocalDateTime.parse(fechaShowString.get(),FormateadorFecha.getFormateador());
 					return criteriaBuilder.greaterThanOrEqualTo(root.get("fechaShow"), fechaShow);
 				} else {
@@ -101,13 +103,13 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 				}
 			}
 		};
-
+		
+		pageable = PageRequest.of(0, 0, null);
 		Specification<Show> todas = specNombreShow.and(specPrecioMenorQue).and(specDeCategoria).and(specFechaMayorQue);
-
-		return this.repositorio.findAll(todas, pageable);
+		return this.repositorio.findAllOrderByTituloDesc(todas, pageable);
 	}
 
-	public Show guardarImagenYAgregarUrlImagen(CrearShowDto dto, MultipartFile imagen) {
+	public Show guardarImagenYAgregarUrlImagen(CrearShowDto dto, MultipartFile file) { 
 		String urlImagen = null;
 
 		if (!file.isEmpty()) {

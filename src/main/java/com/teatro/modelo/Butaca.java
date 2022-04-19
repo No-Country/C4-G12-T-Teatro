@@ -33,10 +33,10 @@ public class Butaca {
 	private Show show;
 
 	@ManyToMany(mappedBy = "butacas")
-	private List<Ticket> ticket;
+	private List<Tiket> tiket;
 
-	@ManyToOne
+	/*@ManyToOne
 	@JoinColumn(name = "seccion_id")
-	private Seccion seccion;
+	private Seccion seccion;*/
 
 }

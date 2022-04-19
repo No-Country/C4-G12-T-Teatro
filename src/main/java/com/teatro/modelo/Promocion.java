@@ -19,7 +19,6 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -70,7 +69,7 @@ public abstract class Promocion {
 		return shows.get(0).getDescripcion();
 	}
 
-	public String getCategoria() {
+	/*public String getCategoria() {
 		return shows.get(0).getCategoria().getNombre();
-	}
+	}*/
 }

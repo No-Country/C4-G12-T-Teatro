@@ -1,4 +1,4 @@
-package com.teatro.seguridad;
+/*package com.teatro.seguridad;
 
 import java.util.Date;
 import java.util.List;
@@ -92,4 +92,4 @@ public class JwtProveedor {
 			log.info("Token JWT no soportado: " + e.getMessage());
 		}
 	}
-}
+}*/
