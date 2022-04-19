@@ -42,9 +42,6 @@ public class Tiket implements Serializable {
 	@CreatedDate
 	LocalDate local;
 
-	@Column(name = "activa")
-	private boolean activa = true;
-
 	@Size(max = 100)
 	@Column(name = "descripcion")
 	private String descripcion;

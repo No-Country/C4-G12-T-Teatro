@@ -39,8 +39,6 @@ public abstract class Promocion implements Serializable{
 	private String titulo;
 
 	private String urlImagen;
-    
-	private boolean activa = true;
 
 	@ManyToOne
 	@NotNull
@@ -61,7 +59,7 @@ public abstract class Promocion implements Serializable{
 		this.show = show;
 	}
 
-	public void eliminarA(Show show) {
-		this.show = null;
+	public float getPrecio() {
+		return this.show.getPrecio();
 	}
 }

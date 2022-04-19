@@ -71,8 +71,6 @@ public class Usuario implements Serializable {
 	@CreatedDate
 	private LocalDateTime fechaDeAlta;
 
-	private boolean activo = true;
-
 	@ManyToOne
 	@JoinColumn(name = "categoria_id")
 	@NotNull

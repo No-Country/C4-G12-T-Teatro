@@ -28,7 +28,7 @@ public class Butaca implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private boolean activa = true;
+	private boolean ocupada = false;
 
 	@ManyToOne
 	@JoinColumn(name = "show_id")

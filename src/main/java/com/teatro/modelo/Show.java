@@ -68,9 +68,6 @@ public class Show implements Serializable{
 	@Size(max = 1500)
 	private String descripcion;
 
-	@Builder.Default
-	private boolean activa = true;
-
 	@ManyToOne()
 	@JoinColumn(name = "categoria_id")
 	private Categoria categoria;

@@ -21,7 +21,7 @@ public class PromocionPorcentual extends Promocion implements Serializable{
 	private float porcentajeACobrar;
 
 	public PromocionPorcentual(String titulo, String urlImagen ,Show show, float descuento) {
-		super(null, titulo, urlImagen, true, show);
+		super(null, titulo, urlImagen, show);
 		this.porcentajeACobrar = (float) ((100 - descuento) / 100.0);
 	}
 
