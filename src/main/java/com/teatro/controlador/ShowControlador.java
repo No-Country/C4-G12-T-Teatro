@@ -52,7 +52,7 @@ public class ShowControlador {
 			@RequestParam("precio") Optional<Float> precio, 
 			@RequestParam("fechaShow") Optional<String> fechaShow,
 			@RequestParam("categoria") Optional<String> categoriaNombre,
-			@PageableDefault(size = 20, page = 0) Pageable pageable, HttpServletRequest request) {
+			@PageableDefault(size = 100, page = 0) Pageable pageable, HttpServletRequest request) {
 		Page<Show> shows = showServicio.buscarPorArgs(titulo, precio, fechaShow, categoriaNombre, pageable);
 		if (shows.isEmpty()) {
 			return ResponseEntity.notFound().build();

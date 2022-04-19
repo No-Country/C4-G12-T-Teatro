@@ -9,8 +9,6 @@ public class ShowNulo extends Show {
 	
 	private static final long serialVersionUID = -2342789798594853155L;
 
-	private static final long serialVersionUID = -2342789798594853155L;
-
 	public static Show construir() {
 		return new ShowNulo();
 	}

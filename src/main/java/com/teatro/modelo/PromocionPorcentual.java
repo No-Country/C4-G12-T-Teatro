@@ -1,7 +1,6 @@
 package com.teatro.modelo;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -21,8 +20,8 @@ public class PromocionPorcentual extends Promocion implements Serializable{
 	
 	private float porcentajeACobrar;
 
-	public PromocionPorcentual(String titulo, String urlImagen, List<Show> shows, float descuento) {
-		super(null, titulo, urlImagen, true, shows);
+	public PromocionPorcentual(String titulo, String urlImagen ,Show show, float descuento) {
+		super(null, titulo, urlImagen, true, show);
 		this.porcentajeACobrar = (float) ((100 - descuento) / 100.0);
 	}
 

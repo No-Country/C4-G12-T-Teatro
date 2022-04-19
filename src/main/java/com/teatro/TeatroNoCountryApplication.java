@@ -65,7 +65,7 @@ public class TeatroNoCountryApplication {
 			showServicio.guardar(show1);
 			showServicio.guardar(show2);
 
-			Promocion promo1 = new PromocionPorcentual("PromoPrueba", null, Arrays.asList(show1, show2), 20);
+			Promocion promo1 = new PromocionPorcentual("PromoPrueba", null, show1, 20);
 
 			promocionServicio.guardar(promo1);
 			

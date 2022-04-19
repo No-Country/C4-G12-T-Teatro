@@ -13,7 +13,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -21,8 +20,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.Length;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -48,7 +46,7 @@ public class Show implements Serializable{
 	private Long id;
 
 	@NotBlank
-	@Length(max = 200)
+	@Size(max = 200)
 	@Column(unique = true)
 	private String titulo;
 
@@ -67,6 +65,7 @@ public class Show implements Serializable{
 	@NotNull
 	private int duracionMinShow;
 
+	@Size(max = 1500)
 	private String descripcion;
 
 	@Builder.Default
@@ -80,7 +79,7 @@ public class Show implements Serializable{
 	@JoinColumn(name = "sala_id")
 	private Sala sala;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "shows")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "show")
 	@JsonBackReference
 	private List<Promocion> promociones;
 

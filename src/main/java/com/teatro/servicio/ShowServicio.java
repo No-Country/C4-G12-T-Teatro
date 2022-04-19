@@ -10,9 +10,7 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,7 +44,7 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 				if (titulo.isPresent()) {
 					return criteriaBuilder.like(criteriaBuilder.lower(root.get("titulo")), "%" + titulo.get() + "%");
 				} else {
-					return criteriaBuilder.isTrue(criteriaBuilder.literal(true)); // No se filtra nada
+					return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
 				}
 			}
 		};
@@ -91,7 +89,6 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 			}
 		};
 		
-		pageable = PageRequest.of(0, 0, null);
 		Specification<Show> todas = specNombreShow.and(specPrecioMenorQue).and(specDeCategoria).and(specFechaMayorQue);
 		return this.repositorio.findAll(todas, pageable);
 	}

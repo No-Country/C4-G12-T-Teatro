@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.teatro.dto.promocion.CrearPromocionDto;
+import com.teatro.dto.promocion.GetPromocionDto;
 import com.teatro.error.exceptions.PromocionNoEncontradaException;
 import com.teatro.error.exceptions.PromocionNoTieneAShowException;
 import com.teatro.error.exceptions.PromocionYaTieneAShowException;
@@ -51,7 +52,7 @@ public class PromocionControlador {
 	private final ShowServicio showServicio;
 
 	@GetMapping
-	public ResponseEntity<List<Promocion>> obtenerPromociones(
+	public ResponseEntity<List<GetPromocionDto>> obtenerPromociones(
 			@RequestParam("titulo") Optional<String> titulo,
 			@RequestParam("fecha") Optional<String> fechaShow,
 			@RequestParam("categoria") Optional<String> categoriaNombre,
@@ -128,7 +129,7 @@ public class PromocionControlador {
 	}
 	
 	@PostMapping("/{idPromocion}/shows/{idShow}")
-	public ResponseEntity<Promocion> agregarShowAPromocion(
+	public ResponseEntity<GetPromocionDto> agregarShowAPromocion(
 			@PathVariable Long idPromocion,
 			@PathVariable Long idShow){
 		Promocion promocion = promocionServicio.buscarPorId(idPromocion).orElseThrow(() -> new PromocionNoEncontradaException(idPromocion));
@@ -143,7 +144,7 @@ public class PromocionControlador {
 	}
 	
 	@DeleteMapping("/{idPromocion}/shows/{idShow}")
-	public ResponseEntity<Promocion> eliminarShowAPromocion(
+	public ResponseEntity<GetPromocionDto> eliminarShowAPromocion(
 			@PathVariable Long idPromocion,
 			@PathVariable Long idShow){
 		Promocion promocion = promocionServicio.buscarPorId(idPromocion).orElseThrow(() -> new PromocionNoEncontradaException(idPromocion));

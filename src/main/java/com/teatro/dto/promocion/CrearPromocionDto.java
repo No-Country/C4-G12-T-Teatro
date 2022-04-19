@@ -1,7 +1,9 @@
 package com.teatro.dto.promocion;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,23 +16,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CrearPromocionDto {
 
+	@NotBlank
+	@Size(max = 60)
 	private String titulo;
-	private float precio;
-	private LocalDateTime fechaShow;
-	private int duracionMinShow;
-	private String descripcion;
-	private Long categoriaId;
-	private Long salaId;
-	private ArrayList<ShowIdDto> showsShowId;
-
-	@Getter
-	@Setter
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public static class ShowIdDto {
-
-		private Long id;
-
-	}
-
+	
+	@NotNull
+	@Min(1)
+	private Long showId;
 }
