@@ -28,9 +28,10 @@ public class ControladorTiket {
     @PostMapping("/tiket/new")
     public ResponseEntity<?>  crear(@Valid @RequestBody Tiket tiketNuevo, BindingResult bindingResult){
     	if (bindingResult.hasErrors())
+
             return new  ResponseEntity<>( bindingResult.getAllErrors(),HttpStatus.BAD_REQUEST);
         tiketService.guardar(tiketNuevo);
-    	    return  new ResponseEntity<>("Tiket  Creado",HttpStatus.CREATED) ;
+    	    return  new ResponseEntity<>("Tiket Creado",HttpStatus.CREATED) ;
 
 
     }

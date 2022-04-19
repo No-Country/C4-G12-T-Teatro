@@ -22,7 +22,4 @@ public class TiketServicio extends BaseServicio<Tiket, Long, TiketRepositorio> {
 	}
 
 
-	public List<Tiket> buscarPorComprador(Long comprador) {
-      return  repositorio.findByComprado(comprador);
-	}
 }

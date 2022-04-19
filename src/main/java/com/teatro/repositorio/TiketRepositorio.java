@@ -11,7 +11,7 @@ import com.teatro.modelo.Tiket;
 public interface TiketRepositorio  extends JpaRepository<Tiket, Long> ,Serializable{
 
 
-    List<Tiket> findByComprado(Long comprador);
+
 
 
 
