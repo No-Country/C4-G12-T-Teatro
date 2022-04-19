@@ -63,17 +63,12 @@ public class Tiket implements Serializable {
 	@JoinColumn(name = "show_id")
 	private Show show;
 
-<<<<<<< HEAD
-//	@ManyToOne
-//	@JoinColumn(name= "usuario_id");
-//	private Usuario usuario;
 
-=======
 	@ManyToOne
 	@JoinColumn(name= "usuario_id")
 	private Usuario comprador;
 	
 	@ManyToMany
 	private List<Butaca> butacas;
->>>>>>> origin/Desarrollo
+
 }

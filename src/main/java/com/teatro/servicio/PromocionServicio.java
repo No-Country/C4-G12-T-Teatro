@@ -114,32 +114,32 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 		return promocion;
 	}
 
-	public Promocion editar(Long id, CrearPromocionDto crearPromocionDto, MultipartFile file) {
+//	public Promocion editar(Long id, CrearPromocionDto crearPromocionDto, MultipartFile file) {
 
-		Promocion promocion = buscarPorId(id).orElse(PromocionNula.construir());
+//		Promocion promocion = buscarPorId(id).orElse(PromocionNula.construir());
 
-		if (!promocion.esNula()) {
-			
-			switch (CrearPromocionDto.getTipo()) {
-			case "porcentual": {
-				
-				promocion = PromocionPorcentual(crearPromocionDto.getTitulo(),crearPromocionDto.getUrlImagen,
-						crearPromocionDto.getShowId().stream().map(id => servicioShow.buscarPorId(id))
-						.collect(Arrays.asList()), crearPromocionDto.getDescuento());
-			}
-			default:
-				throw new IllegalArgumentException("Valor inesperado: " + key);
-			}
-
-			if (!file.isEmpty()) {
-				String imagen = almacenamientoServicio.store(file);
-				String urlImagen = MvcUriComponentsBuilder
-						.fromMethodName(FicheroControlador.class, "serveFile", imagen, null).build().toUriString();
-				promocion.setUrlImagen(urlImagen);
-			}
-
-			return guardar(promocion);
-		} else
-			return promocion;
-	}
+//		if (!promocion.esNula()) {
+//
+//			switch (CrearPromocionDto.getTipo()) {
+//			case "porcentual": {
+//
+//				promocion = PromocionPorcentual(crearPromocionDto.getTitulo(),crearPromocionDto.getUrlImagen,
+//						crearPromocionDto.getShowId().stream().map(id => servicioShow.buscarPorId(id))
+//						.collect(Arrays.asList()), crearPromocionDto.getDescuento());
+//			}
+//			default:
+//				throw new IllegalArgumentException("Valor inesperado: " + key);
+//			}
+//
+//			if (!file.isEmpty()) {
+//				String imagen = almacenamientoServicio.store(file);
+//				String urlImagen = MvcUriComponentsBuilder
+//						.fromMethodName(FicheroControlador.class, "serveFile", imagen, null).build().toUriString();
+//				promocion.setUrlImagen(urlImagen);
+//			}
+//
+//			return guardar(promocion);
+//		} else
+//			return promocion;
+//	}
 }

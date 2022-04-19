@@ -1,13 +1,11 @@
 package com.teatro.seguridad;
-
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.AlgorithmMismatchException;
@@ -31,17 +29,12 @@ public class JwtProveedor {
 
 	@Value("${jwt.secreto}")
 	private String jwtSecreto;
-
 	@Value("${jwt.expiracion}")
 	private int jwtDuracionEnSeg;
-	
 	private final UsuarioServicio usuarioServicio;
 	public static final String TOKEN_HEADER = "Authorization";
 	public static final String TOKEN_PREFIX = "Bearer ";
 	public static final String TOKEN_TYPE = "JWT";
-
-	
-
 	public String generarToken(String email) {
 		Usuario usuario = usuarioServicio.buscarPorEmail(email)
 							.orElseThrow(() -> new UsuarioNoEncontradoException(email));
@@ -50,8 +43,10 @@ public class JwtProveedor {
 		String rolesConFormato = usuario.getRoles().stream()
 													.map(RolUsuario::name)
 													.collect(Collectors.joining(", "));
-		
-		return JWT.create().withHeader(Map.of("type", TOKEN_TYPE))
+		Map<String,Object> m = new HashMap<>();
+		m.put("type",TOKEN_TYPE);
+		return JWT.create().withHeader(m)
+
 							.withSubject(Long.toString(usuario.getId()))
 							.withIssuedAt(new Date())
 							.withExpiresAt(fechaExpiracionToken)
@@ -59,13 +54,10 @@ public class JwtProveedor {
 							.withClaim("username", usuario.getEmail())
 							.sign(construirAlgotirmo());
 	}
-	
 	public Long obtenerIdDeJWT(String token) {
 		DecodedJWT jwtDecodificado = decodificar(token);
-		
 		return Long.parseLong(jwtDecodificado.getSubject());
 	}
-	
 	public List<String> obtenerRolesDeJWT(String token){
 		DecodedJWT jwtDecodificado = decodificar(token);
 		

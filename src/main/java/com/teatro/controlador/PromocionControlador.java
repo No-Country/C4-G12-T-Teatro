@@ -85,15 +85,15 @@ public class PromocionControlador {
 
 		return ResponseEntity.noContent().build();
 	}
-
-	@PutMapping(name = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<Promocion> editarPromocion(@PathVariable Long id,
-			@RequestPart("promocion") CrearPromocionDto promocionDto, @RequestPart("imagen") MultipartFile imagen) {
-		Promocion promocion = promocionServicio.editar(id, promocionDto, imagen);
-		if (promocion.esNula()) {
-			return ResponseEntity.notFound().build();
-		}
-
-		return ResponseEntity.ok().body(promocion);
-	}
+//
+//	@PutMapping(name = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//	public ResponseEntity<Promocion> editarPromocion(@PathVariable Long id,
+//			@RequestPart("promocion") CrearPromocionDto promocionDto, @RequestPart("imagen") MultipartFile imagen) {
+//		Promocion promocion = promocionServicio.editar(id,promocionDto, imagen);
+//		if (promocion.esNula()) {
+//			return ResponseEntity.notFound().build();
+//		}
+//
+//		return ResponseEntity.ok().body(promocion);
+//	}
 }
