@@ -1,4 +1,4 @@
-package com.teatro.dto.usuario;
+package com.teatro.dto.show;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,10 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetUsuarioDto {
+public class GetShowDto {
 
-	private String nombreCompleto;
-	private String email;
-	private int edad;
-	private String preferenciaNombre;
+	private String titulo;
 }
