@@ -87,5 +87,4 @@ public abstract class Promocion implements Serializable{
 	public void eliminarA(Show show) {
 		this.shows.remove(show);
 	}
->>>>>>> db04466c3546654c7d2ec09036f00a741a1c8a69
 }
