@@ -2,6 +2,7 @@ package com.teatro.modelo;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -15,6 +16,10 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.apache.commons.lang3.builder.ToStringExclude;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -47,6 +52,13 @@ public class Sala implements Serializable{
 	@NotNull
 	private int filas;
 	
+	@ToStringExclude
+
+	@JsonBackReference
 	@OneToMany(mappedBy = "sala")
-	private List<Show> shows;
+	private List<Show> shows = new ArrayList<>();
+	
+	public boolean esNula() {
+		return false;
+	}
 }
