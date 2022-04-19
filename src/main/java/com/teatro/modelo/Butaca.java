@@ -1,14 +1,12 @@
 package com.teatro.modelo;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
@@ -35,11 +33,15 @@ public class Butaca implements Serializable{
 	@NotNull
 	private Show show;
 
-	@ManyToMany(mappedBy = "butacas")
-	private List<Tiket> tiket;
+	@ManyToOne
+	private Tiket tiket;
 
 	@ManyToOne
 	@JoinColumn(name = "seccion_id")
 	private Seccion seccion;
+	
+	public void ocuparButaca() {
+		this.ocupada = true;
+	}
 }
 

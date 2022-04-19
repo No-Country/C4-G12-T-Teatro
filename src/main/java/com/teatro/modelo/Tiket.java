@@ -11,8 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -64,6 +64,6 @@ public class Tiket implements Serializable {
 	@JoinColumn(name= "usuario_id")
 	private Usuario comprador;
 	
-	@ManyToMany
+	@OneToMany(mappedBy = "tiket")
 	private List<Butaca> butacas;
 }
