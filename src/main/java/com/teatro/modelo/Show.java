@@ -2,6 +2,7 @@ package com.teatro.modelo;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -58,7 +59,7 @@ public class Show implements Serializable{
 	private String urlImagen;
 
 	@NotNull
-	@JsonFormat(shape = Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+	@JsonFormat(shape = Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
 	private LocalDateTime fechaShow;
 
 	@Min(0)
@@ -83,8 +84,9 @@ public class Show implements Serializable{
 	@JsonBackReference
 	private List<Promocion> promociones;
 
+	@Builder.Default
 	@OneToMany(mappedBy = "show", cascade = CascadeType.ALL)
-	private List<Butaca> butacas;
+	private List<Butaca> butacas = new ArrayList<>();
 
 	public boolean esNulo() {
 		return false;

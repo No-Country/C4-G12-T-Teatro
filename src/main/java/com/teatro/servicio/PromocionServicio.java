@@ -1,7 +1,6 @@
 package com.teatro.servicio;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Optional;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -18,32 +17,20 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import com.teatro.controlador.FicheroControlador;
-import com.teatro.dto.show.CrearPromocionDto;
 import com.teatro.modelo.Promocion;
-import com.teatro.modelo.objetonulo.PromocionNula;
 import com.teatro.repositorio.PromocionRepositorio;
 import com.teatro.servicio.base.BaseServicio;
-import com.teatro.util.converter.PromocionDtoConverter;
 import com.teatro.util.formateador.FormateadorFecha;
 
 @Service
 public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRepositorio> {
 
-	private final PromocionDtoConverter converter;
 	private final AlmacenamientoServicio almacenamientoServicio;
-	private final ShowServicio showServicio;
-	private final CategoriaServicio categoriaServicio;
-
 
 	@Autowired
-	public PromocionServicio(PromocionRepositorio repositorio, PromocionDtoConverter converter,
-			AlmacenamientoServicio almacenamientoServicio, ShowServicio showServicio,
-			CategoriaServicio categoriaServicio) {
+	public PromocionServicio(PromocionRepositorio repositorio, AlmacenamientoServicio almacenamientoServicio) {
 		super(repositorio);
-		this.converter = converter;
 		this.almacenamientoServicio = almacenamientoServicio;
-		this.showServicio = showServicio;
-		this.categoriaServicio = categoriaServicio;
 	}
 
 
@@ -98,21 +85,22 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 
 		return this.repositorio.findAll(todas, pageable);
 	}
-
-	public Promocion guardarImagenYagregarUrlImagen(CrearPromocionDto promocionDto, MultipartFile file) {
-		String urlImagen = null;
-
-		if (!file.isEmpty()) {
-			String imagen = almacenamientoServicio.store(file);
-			urlImagen = MvcUriComponentsBuilder.fromMethodName(FicheroControlador.class, "serveFile", imagen, null)
-					.build().toUriString();
-		}
-
-		Promocion promocion = converter.convertirCrearPromocionDtoAPromocion(promocionDto);
-		promocion.setUrlImagen(urlImagen);
-
-		return promocion;
-	}
+//
+//<<<<<<< HEAD
+//	public Promocion guardarImagenYagregarUrlImagen(CrearPromocionDto promocionDto, MultipartFile file) {
+//		String urlImagen = null;
+//
+//		if (!file.isEmpty()) {
+//			String imagen = almacenamientoServicio.store(file);
+//			urlImagen = MvcUriComponentsBuilder.fromMethodName(FicheroControlador.class, "serveFile", imagen, null)
+//					.build().toUriString();
+//		}
+//
+//		Promocion promocion = converter.convertirCrearPromocionDtoAPromocion(promocionDto);
+//		promocion.setUrlImagen(urlImagen);
+//
+//		return promocion;
+//	}
 
 //	public Promocion editar(Long id, CrearPromocionDto crearPromocionDto, MultipartFile file) {
 
@@ -142,4 +130,19 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 //		} else
 //			return promocion;
 //	}
+
+	public Promocion guardarImagenYagregarUrlImagen(Promocion promocion, MultipartFile archivo) {
+		if (!archivo.isEmpty()) {
+			String imagen = almacenamientoServicio.store(archivo);
+			String urlImagen = MvcUriComponentsBuilder
+					.fromMethodName(FicheroControlador.class, "serveFile", imagen, null).build().toUriString();
+			
+			if(promocion.getUrlImagen() != null) {
+				almacenamientoServicio.delete(promocion.getUrlImagen());
+			}
+			promocion.setUrlImagen(urlImagen);
+		}
+		return promocion;
+	}
+
 }

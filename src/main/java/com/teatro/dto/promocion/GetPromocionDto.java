@@ -1,4 +1,4 @@
-package com.teatro.dto.show;
+package com.teatro.dto.promocion;
 
 public class GetPromocionDto {
 
