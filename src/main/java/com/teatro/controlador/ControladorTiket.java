@@ -64,17 +64,12 @@ public class ControladorTiket {
 
  // BUSCAR POR USUARIO
 
-        @GetMapping("/tiket/comprador/{comprador}")
-        @ResponseBody
-        public List<Tiket> buscarPorComprador(@PathVariable("comprador") Long comprador){
-        if (usuarioServicio.existePorId(comprador)
-
-           return tiketService.buscarPorComprador(comprador);
-        }
-
-     //   @GetMapping("/tiket/show")
-
-        //
+//        @GetMapping("/tiket/comprador/{comprador}")
+//        @ResponseBody
+//        public List<Tiket> buscarPorComprador(@PathVariable("comprador") Long comprador){
+//        if (usuarioServicio.existePorId(comprador)
+//           return tiketService.buscarPorComprador(comprador);
+//        }
 
 
 
