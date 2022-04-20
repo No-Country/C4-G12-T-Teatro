@@ -12,13 +12,31 @@ import com.teatro.error.ApiError;
 import com.teatro.error.exceptions.AlmacenamientoArchivoNoEncontradoException;
 import com.teatro.error.exceptions.AlmacenamientoException;
 import com.teatro.error.exceptions.CategoriaNoEncontradaException;
+import com.teatro.error.exceptions.ContrasenasNoCoincidenException;
 import com.teatro.error.exceptions.PromocionNoEncontradaException;
+import com.teatro.error.exceptions.PromocionNoTieneAShowException;
+import com.teatro.error.exceptions.PromocionYaTieneAShowException;
+import com.teatro.error.exceptions.SalaNoEncontradaException;
+import com.teatro.error.exceptions.ShowNoEncontradoException;
+import com.teatro.error.exceptions.ShowYaTieneUnaSalaException;
+import com.teatro.error.exceptions.UsuarioNoEncontradoException;
 
 @RestControllerAdvice
 public class ErrorControlador extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler({AlmacenamientoArchivoNoEncontradoException.class, AlmacenamientoException.class,
-		CategoriaNoEncontradaException.class, PromocionNoEncontradaException.class,})
+		CategoriaNoEncontradaException.class, PromocionNoEncontradaException.class,
+		SalaNoEncontradaException.class, ShowNoEncontradoException.class, UsuarioNoEncontradoException.class,})
+	public ResponseEntity<ApiError> noEncontradoException(RuntimeException exception){
+		return construirErrorResponseEntity(HttpStatus.NOT_FOUND, exception.getMessage());
+	}
+	
+	@ExceptionHandler({ContrasenasNoCoincidenException.class, ShowYaTieneUnaSalaException.class,
+		PromocionNoTieneAShowException.class, PromocionYaTieneAShowException.class,
+		ShowYaTieneUnaSalaException.class})
+	public ResponseEntity<ApiError> reqquestErroneaException(RuntimeException exception){
+		return construirErrorResponseEntity(HttpStatus.BAD_REQUEST, exception.getMessage());
+	}
 	
 	@Override
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
