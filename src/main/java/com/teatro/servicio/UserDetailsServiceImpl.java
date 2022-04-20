@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.teatro.modelo.Usuario;
+
 import lombok.RequiredArgsConstructor;
 
 @Service("UserDetailsService")
@@ -17,15 +19,15 @@ import lombok.RequiredArgsConstructor;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	private final UsuarioServicio usuarioServicio;
-	
+
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Usuario usuario = usuarioServicio.buscarPorEmail(username)
-											.orElseThrow(() -> new UsernameNotFoundException(username + " no encontrado."));
-		
+	public UserDetails loadUserByUsername(String nombreUsuario) throws UsernameNotFoundException {
+		Usuario usuario = usuarioServicio.buscarPorEmail(nombreUsuario)
+				.orElseThrow(() -> new UsernameNotFoundException(nombreUsuario + " no encontrado."));
+
 		Collection<SimpleGrantedAuthority> authorities = usuario.getRoles().stream()
 				.map(rol -> new SimpleGrantedAuthority(rol.name())).collect(Collectors.toList());
-		
+
 		return new User(usuario.getEmail(), usuario.getContrasena(), authorities);
 	}
 }
