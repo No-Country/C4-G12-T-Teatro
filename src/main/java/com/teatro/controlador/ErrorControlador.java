@@ -1,8 +1,11 @@
 package com.teatro.controlador;
 
+import java.util.List;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -20,6 +23,8 @@ import com.teatro.error.exceptions.SalaNoEncontradaException;
 import com.teatro.error.exceptions.ShowNoEncontradoException;
 import com.teatro.error.exceptions.ShowYaTieneUnaSalaException;
 import com.teatro.error.exceptions.UsuarioNoEncontradoException;
+import com.teatro.error.exceptions.UsuarioYaExisteException;
+import com.teatro.error.exceptions.ValidacionException;
 
 @RestControllerAdvice
 public class ErrorControlador extends ResponseEntityExceptionHandler{
@@ -34,8 +39,18 @@ public class ErrorControlador extends ResponseEntityExceptionHandler{
 	@ExceptionHandler({ContrasenasNoCoincidenException.class, ShowYaTieneUnaSalaException.class,
 		PromocionNoTieneAShowException.class, PromocionYaTieneAShowException.class,
 		ShowYaTieneUnaSalaException.class})
-	public ResponseEntity<ApiError> reqquestErroneaException(RuntimeException exception){
+	public ResponseEntity<ApiError> requestErroneaException(RuntimeException exception){
 		return construirErrorResponseEntity(HttpStatus.BAD_REQUEST, exception.getMessage());
+	}
+	
+	@ExceptionHandler({UsuarioYaExisteException.class})
+	public ResponseEntity<ApiError> conflitoErrores(RuntimeException exception){
+		return construirErrorResponseEntity(HttpStatus.BAD_REQUEST, exception.getMessage());
+	}
+	
+	@ExceptionHandler({ValidacionException.class})
+	public ResponseEntity<ApiError> conflitoErrores(ValidacionException exception){
+		return construirErrorResponseEntity(HttpStatus.BAD_REQUEST, exception.getMessage(), exception.getErrores());
 	}
 	
 	@Override
@@ -49,6 +64,14 @@ public class ErrorControlador extends ResponseEntityExceptionHandler{
 		return ResponseEntity.status(status).body(ApiError.builder()
 															.estado(status)
 															.mensaje(message)
+															.build());
+	}
+	
+	private ResponseEntity<ApiError> construirErrorResponseEntity(HttpStatus status, String message, List<ObjectError> errores) {
+		return ResponseEntity.status(status).body(ApiError.builder()
+															.estado(status)
+															.mensaje(message)
+															.errores(errores)
 															.build());
 	}
 }
