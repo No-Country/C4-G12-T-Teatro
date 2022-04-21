@@ -23,6 +23,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.teatro.dto.sala.CrearSalaDto;
 import com.teatro.dto.sala.EditarSalaDto;
+import com.teatro.dto.sala.GetSalaDto;
 import com.teatro.error.exceptions.ShowNoEncontradoException;
 import com.teatro.error.exceptions.ShowYaTieneUnaSalaException;
 import com.teatro.error.exceptions.ValidacionException;
@@ -61,7 +62,7 @@ public class SalaControlador {
 	}
 	
 	@GetMapping("/{nombre}")
-	public ResponseEntity<Sala> obtenerSala(
+	public ResponseEntity<GetSalaDto> obtenerSala(
 			@PathVariable String nombre){
 		Sala sala = salaService.buscarPorNombre(nombre).orElse(SalaNula.construir());
 		
@@ -69,7 +70,7 @@ public class SalaControlador {
 			return ResponseEntity.notFound().build();
 		}
 		
-		return ResponseEntity.ok(sala);
+		return ResponseEntity.ok(converter.convertirSalaAGetSalaDto(sala));
 	}
 
 	@PostMapping

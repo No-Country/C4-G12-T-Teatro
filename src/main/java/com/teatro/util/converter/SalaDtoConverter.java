@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import com.teatro.dto.sala.CrearSalaDto;
+import com.teatro.dto.sala.GetSalaDto;
 import com.teatro.modelo.Sala;
 
 import lombok.RequiredArgsConstructor;
@@ -16,5 +17,9 @@ public class SalaDtoConverter {
 	
 	public Sala convertirCrearSalaDtoASala(CrearSalaDto salaDto) {
 		return mapper.map(salaDto, Sala.class);
+	}
+	
+	public GetSalaDto convertirSalaAGetSalaDto(Sala sala) {
+		return mapper.map(sala, GetSalaDto.class);
 	}
 }

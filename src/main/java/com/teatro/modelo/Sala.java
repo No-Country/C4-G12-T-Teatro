@@ -3,7 +3,9 @@ package com.teatro.modelo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -60,5 +62,47 @@ public class Sala implements Serializable{
 	
 	public boolean esNula() {
 		return false;
+	}
+	
+	public Map<Integer, Butaca []> getMapaSala(Show show){
+		List<Butaca> butacas = show.getButacas();
+		Map<Integer, Butaca[]> mapa = new HashMap<>();
+		
+		int butacaPorFila = capacidad / filas;
+		int butacasSobrantes = capacidad % filas;
+		
+		for (int i = 0; i < filas; i++) {
+			if (butacasSobrantes > 0) {
+				mapa.put(i + 1 , new Butaca[butacaPorFila + 1]);
+				butacasSobrantes--;
+			} else {
+				mapa.put(i + 1, new Butaca[butacaPorFila]); 
+			}
+		}
+		for (Butaca butaca : butacas) {
+			Butaca [] but = mapa.get(butaca.getFila());
+			but[butaca.getNumero()-1] = butaca;
+			mapa.replace(butaca.getFila(), but);
+		}
+		
+		return mapa;
+	}
+	
+	public boolean esButacaExistenteEnSala(Butaca butaca) {
+		Map<Integer, Integer[]> mapa = new HashMap<>();
+		
+		int butacaPorFila = capacidad / filas;
+		int butacasSobrantes = capacidad % filas;
+		
+		for (int i = 0; i < filas; i++) {
+			if (butacasSobrantes > 0) {
+				mapa.put(i + 1 , new Integer[butacaPorFila + 1]);
+				butacasSobrantes--;
+			} else {
+				mapa.put(i + 1, new Integer[butacaPorFila]); 
+			}
+		}
+		
+		return mapa.get(butaca.getFila()).length < butaca.getNumero();
 	}
 }

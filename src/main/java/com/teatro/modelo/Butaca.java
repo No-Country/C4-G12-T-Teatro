@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,9 +27,14 @@ public class Butaca implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	private int fila;
+	
+	private int numero;
 
 	private boolean ocupada = false;
 
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "show_id")
 	@NotNull

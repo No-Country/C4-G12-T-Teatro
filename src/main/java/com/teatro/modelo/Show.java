@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -82,6 +83,7 @@ public class Show implements Serializable{
 	@JsonBackReference
 	private List<Promocion> promociones;
 
+	@JsonManagedReference
 	@Builder.Default
 	@OneToMany(mappedBy = "show", cascade = CascadeType.ALL)
 	private List<Butaca> butacas = new ArrayList<>();
@@ -104,5 +106,9 @@ public class Show implements Serializable{
 
 	public void eliminarSala() {
 		this.sala = null;
+	}
+	
+	public Map<Integer, Butaca[]> getMapaButacas(){
+		return this.sala.getMapaSala(this);
 	}
 }
