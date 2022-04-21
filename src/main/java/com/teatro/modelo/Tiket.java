@@ -22,6 +22,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -30,6 +31,7 @@ import lombok.NoArgsConstructor;
 @Data
 @EntityListeners(AuditingEntityListener.class)
 @Entity
+@Builder
 public class Tiket implements Serializable {
 
 	private static final long serialVersionUID = 7821507459652032840L;
@@ -40,7 +42,7 @@ public class Tiket implements Serializable {
 
 	@Column(name = "fecha_compra")
 	@CreatedDate
-	LocalDate local;
+	LocalDate fechaCompra;
 
 	@Size(max = 100)
 	@Column(name = "descripcion")

@@ -109,6 +109,14 @@ public class Show implements Serializable{
 	}
 	
 	public Map<Integer, Butaca[]> getMapaButacas(){
-		return this.sala.getMapaSala(this);
+		return this.sala.getButacasDisponiblesPara(this);
+	}
+	
+	public void ocuparButaca(Butaca butaca) {
+		this.butacas.add(butaca);
+	}
+	
+	public void desocuparButaca(Butaca butaca) {
+		this.butacas.remove(butaca);
 	}
 }

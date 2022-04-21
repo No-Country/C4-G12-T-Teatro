@@ -64,7 +64,7 @@ public class Sala implements Serializable{
 		return false;
 	}
 	
-	public Map<Integer, Butaca []> getMapaSala(Show show){
+	public Map<Integer, Butaca []> getButacasDisponiblesPara(Show show){
 		List<Butaca> butacas = show.getButacas();
 		Map<Integer, Butaca[]> mapa = new HashMap<>();
 		
