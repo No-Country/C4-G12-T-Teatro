@@ -15,14 +15,18 @@ import java.util.Optional;
 public class TiketServicio extends BaseServicio<Tiket, Long, TiketRepositorio> {
 
 
-
 	@Autowired
-	public TiketServicio(TiketRepositorio repositorio){
+	public TiketServicio(TiketRepositorio repositorio) {
 		super(repositorio);
 	}
 
 
-	public List<Tiket> buscarPorComprador(Optional<Usuario> comprador) {
+	public List<Tiket> buscarPorComprador(Usuario comprador) {
 		return repositorio.findByComprador(comprador);
+	}
+
+
+	public List<Tiket> buscarPorNombre(Usuario nombre) {
+		return repositorio.findByNombre(nombre);
 	}
 }

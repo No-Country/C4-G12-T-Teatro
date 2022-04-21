@@ -44,14 +44,16 @@ public class Tiket implements Serializable {
 	@CreatedDate
 	LocalDate local;
 
-	@Size(max = 100)
-	@Column(name = "descripcion")
-	private String descripcion;
-
 	@NotNull
 	@Min(1)
 	@Max(100000)
 	private float precio;
+
+	@NotNull
+	@Size
+	private  String NombreApelido;
+
+
 
 	@NotNull
 	@Min(1)

@@ -60,7 +60,7 @@ public class TeatroNoCountryApplication {
 
 			usuarioServicio.guardar(us);
 			usuarioServicio.guardar(us1);
-			Tiket tiket1=new Tiket((Long) null,null,"weewew",31231,32322,show1,us1 ,null);
+			Tiket tiket1=new Tiket((Long) null,null,31231,32322,show1,us1 ,null);
 			tiketServicio.guardar(tiket1);
 
 		};

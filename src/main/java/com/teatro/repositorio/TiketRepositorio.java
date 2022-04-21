@@ -10,5 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.teatro.modelo.Tiket;
 
 public interface TiketRepositorio  extends JpaRepository<Tiket, Long> ,Serializable{
-    List<Tiket> findByComprador(Optional<Usuario> comprador);
+    List<Tiket> findByComprador(Usuario comprador);
+
+    List<Tiket>findByNombre(Usuario nombreApellido);
 }
