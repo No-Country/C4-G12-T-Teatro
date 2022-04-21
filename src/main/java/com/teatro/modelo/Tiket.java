@@ -18,6 +18,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -60,7 +62,7 @@ public class Tiket implements Serializable {
 	@JoinColumn(name = "show_id")
 	private Show show;
 
-
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name= "usuario_id")
 	private Usuario comprador;
@@ -68,4 +70,8 @@ public class Tiket implements Serializable {
 	@OneToMany(mappedBy = "tiket")
 	private List<Butaca> butacas;
 
+
+	public boolean esNulo() {
+		return false;
+	}
 }

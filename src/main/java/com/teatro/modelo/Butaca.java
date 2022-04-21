@@ -36,9 +36,9 @@ public class Butaca implements Serializable{
 	@ManyToOne
 	private Tiket tiket;
 
-	@ManyToOne
+	/*@ManyToOne
 	@JoinColumn(name = "seccion_id")
-	private Seccion seccion;
+	private Seccion seccion;*/
 	
 	public void ocuparButaca() {
 		this.ocupada = true;

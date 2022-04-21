@@ -17,9 +17,12 @@ public class TiketServicio extends BaseServicio<Tiket, Long, TiketRepositorio> {
 
 
 	@Autowired
-	public TiketServicio(TiketRepositorio repositorio) {
+	public TiketServicio(TiketRepositorio repositorio){
 		super(repositorio);
 	}
 
 
+	public List<Tiket> buscarPorComprador(Optional<Usuario> comprador) {
+		return repositorio.findByComprador(comprador);
+	}
 }
