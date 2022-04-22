@@ -3,7 +3,9 @@ package com.teatro.modelo;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,6 +27,7 @@ import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -72,6 +75,7 @@ public class Show implements Serializable{
 	@JoinColumn(name = "categoria_id")
 	private Categoria categoria;
 
+	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name = "sala_id")
 	private Sala sala;
@@ -80,11 +84,47 @@ public class Show implements Serializable{
 	@JsonBackReference
 	private List<Promocion> promociones;
 
+	@JsonManagedReference
 	@Builder.Default
 	@OneToMany(mappedBy = "show", cascade = CascadeType.ALL)
 	private List<Butaca> butacas = new ArrayList<>();
 
 	public boolean esNulo() {
 		return false;
+	}
+
+	public void agregarA(Sala sala) {
+		this.sala = sala;
+	}
+
+	public boolean tieneSala() {
+		return this.sala != null;
+	}
+
+	public boolean noTieneA(Sala sala) {
+		return !this.sala.equals(sala);
+	}
+
+	public void eliminarSala() {
+		this.sala = null;
+	}
+	
+	public Map<Integer, Butaca[]> getMapaButacas(){
+		if(sala != null)
+			return this.sala.getButacasDisponiblesPara(this);
+		else
+			return new HashMap<>();
+	}
+	
+	public void ocuparButaca(Butaca butaca) {
+		this.butacas.add(butaca);
+	}
+	
+	public void desocuparButaca(Butaca butaca) {
+		this.butacas.remove(butaca);
+	}
+
+	public boolean yaTieneA(Butaca butaca) {
+		return this.butacas.contains(butaca);
 	}
 }

@@ -34,7 +34,7 @@ public class AutorizacionFiltro extends OncePerRequestFilter {
 			throws ServletException, IOException {
 
 		try {
-			String token = obtenerTokenDeLaRequest(request);
+			String token = jwtProveedor.obtenerTokenDeLaRequest(request);
 
 			if (StringUtils.hasText(token) && jwtProveedor.esValido(token)) {
 				UserDetails userDetails = detailsServiceImpl
@@ -52,15 +52,5 @@ public class AutorizacionFiltro extends OncePerRequestFilter {
 		}
 
 		filterChain.doFilter(request, response);
-	}
-
-	private String obtenerTokenDeLaRequest(HttpServletRequest request) {
-		String bearerToken = request.getHeader(JwtProveedor.TOKEN_HEADER);
-
-		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(JwtProveedor.TOKEN_PREFIX)) {
-			return bearerToken.substring(JwtProveedor.TOKEN_PREFIX.length(), bearerToken.length());
-		}
-
-		return null;
 	}
 }

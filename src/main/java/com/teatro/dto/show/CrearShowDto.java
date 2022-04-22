@@ -43,5 +43,6 @@ public class CrearShowDto {
 	private Long categoriaId;
 	
 	@Min(1)
+	@NotNull
 	private Long salaId;
 }

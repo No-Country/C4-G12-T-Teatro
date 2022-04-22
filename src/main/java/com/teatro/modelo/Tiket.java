@@ -11,10 +11,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -22,6 +23,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -30,6 +32,7 @@ import lombok.NoArgsConstructor;
 @Data
 @EntityListeners(AuditingEntityListener.class)
 @Entity
+@Builder
 public class Tiket implements Serializable {
 
 	private static final long serialVersionUID = 7821507459652032840L;
@@ -40,11 +43,11 @@ public class Tiket implements Serializable {
 
 	@Column(name = "fecha_compra")
 	@CreatedDate
-	LocalDate local;
-
+	LocalDate fechaCompra;
+	
 	@Size(max = 100)
-	@Column(name = "descripcion")
-	private String descripcion;
+	@NotBlank
+	private String nombreCompleto;
 
 	@NotNull
 	@Min(1)
@@ -64,6 +67,7 @@ public class Tiket implements Serializable {
 	@JoinColumn(name= "usuario_id")
 	private Usuario comprador;
 	
-	@ManyToMany
+	@OneToMany(mappedBy = "tiket")
 	private List<Butaca> butacas;
+
 }

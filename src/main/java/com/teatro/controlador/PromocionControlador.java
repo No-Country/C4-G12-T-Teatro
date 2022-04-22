@@ -43,7 +43,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("promociones")
+@RequestMapping("/promociones")
 public class PromocionControlador {
 
 	private final PromocionServicio promocionServicio;

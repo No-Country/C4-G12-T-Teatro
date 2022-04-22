@@ -7,5 +7,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.teatro.modelo.Tiket;
 
 public interface TiketRepositorio  extends JpaRepository<Tiket, Long> ,Serializable{
-
 }
