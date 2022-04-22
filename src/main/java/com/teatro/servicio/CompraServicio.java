@@ -172,7 +172,7 @@ public class CompraServicio {
 	
 	private boolean esPagoConMercadoPagoExitoso() {
 		// Logica Mercado Pago para hacer la compra y si es correcto seguir con el
-				// proceso de compra
+		// proceso de compra
 		
 		return true;
 	}
