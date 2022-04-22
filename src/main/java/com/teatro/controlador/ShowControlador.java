@@ -1,6 +1,8 @@
 package com.teatro.controlador;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -28,7 +30,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.teatro.dto.show.CrearShowDto;
 import com.teatro.dto.show.GetShowDto;
+import com.teatro.error.exceptions.LaSalaYaTieneUnShowEnEseHorarioException;
 import com.teatro.error.exceptions.ValidacionException;
+import com.teatro.modelo.Butaca;
 import com.teatro.modelo.Show;
 import com.teatro.modelo.objetonulo.ShowNulo;
 import com.teatro.servicio.ShowServicio;
@@ -89,6 +93,12 @@ public class ShowControlador {
 		}
 		Show show = converter.convertirCrearShowDtoAShow(crearShowDto);
 		show = showServicio.guardarImagenYAgregarUrlImagen(show, imagen);
+		LocalDateTime desde = show.getFechaShow();
+		LocalDateTime hasta = desde.plusMinutes(show.getDuracionMinShow());
+				
+		if(showServicio.tieneLaSalaShowEntreHorarios(show.getSala(), desde, hasta)) {
+			throw new LaSalaYaTieneUnShowEnEseHorarioException(show.getSala(), desde, hasta);
+		}
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(showServicio.guardar(show));
 	}
@@ -108,6 +118,12 @@ public class ShowControlador {
 			return ResponseEntity.notFound().build();
 		}
 		show = showServicio.guardarImagenYAgregarUrlImagen(show, imagen);
+		LocalDateTime desde = show.getFechaShow();
+		LocalDateTime hasta = desde.plusMinutes(show.getDuracionMinShow());
+		
+		if(showServicio.tieneLaSalaShowEntreHorarios(show.getSala(), desde, hasta)) {
+			throw new LaSalaYaTieneUnShowEnEseHorarioException(show.getSala(), desde, hasta);
+		}
 		
 		return ResponseEntity.ok(showServicio.editar(show));
 	}
@@ -123,4 +139,17 @@ public class ShowControlador {
 			return ResponseEntity.noContent().build();
 		}
 	}
+	
+	@GetMapping("/{id}/butacas")
+	public ResponseEntity<Map<Integer,Butaca[]>> obtenerButacasDisponibles(
+			@PathVariable Long id){
+		Show show = showServicio.buscarPorId(id).orElse(ShowNulo.construir());
+		
+		if (show.esNulo()) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		return ResponseEntity.ok(show.getMapaButacas());
+	}
+	
 }

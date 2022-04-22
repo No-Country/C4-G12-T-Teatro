@@ -1,11 +1,9 @@
 package com.teatro.dto.show;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
-import com.teatro.modelo.Butaca;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,7 +25,4 @@ public class GetShowDto {
 	private String descripcion;
 	private String categoriaNombre;
 	private String salaNombre;
-	
-	private Map<Integer, Butaca[]> mapaButacas;
-	
 }

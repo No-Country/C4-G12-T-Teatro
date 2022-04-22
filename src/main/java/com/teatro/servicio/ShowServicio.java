@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import com.teatro.controlador.FicheroControlador;
+import com.teatro.modelo.Sala;
 import com.teatro.modelo.Show;
 import com.teatro.repositorio.ShowRepositorio;
 import com.teatro.servicio.base.BaseServicio;
@@ -105,5 +106,9 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 			show.setUrlImagen(urlImagen);
 		}
 		return show;
+	}
+	
+	public boolean tieneLaSalaShowEntreHorarios(Sala sala, LocalDateTime desde, LocalDateTime hasta) {
+		return this.repositorio.existsByFechaShowBetweenAndSala(desde, hasta, sala);
 	}
 }

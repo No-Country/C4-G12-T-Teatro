@@ -3,6 +3,7 @@ package com.teatro.modelo;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -109,7 +110,10 @@ public class Show implements Serializable{
 	}
 	
 	public Map<Integer, Butaca[]> getMapaButacas(){
-		return this.sala.getButacasDisponiblesPara(this);
+		if(sala != null)
+			return this.sala.getButacasDisponiblesPara(this);
+		else
+			return new HashMap<>();
 	}
 	
 	public void ocuparButaca(Butaca butaca) {
@@ -118,5 +122,9 @@ public class Show implements Serializable{
 	
 	public void desocuparButaca(Butaca butaca) {
 		this.butacas.remove(butaca);
+	}
+
+	public boolean yaTieneA(Butaca butaca) {
+		return this.butacas.contains(butaca);
 	}
 }

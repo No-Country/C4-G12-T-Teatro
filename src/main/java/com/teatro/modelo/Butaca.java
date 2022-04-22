@@ -1,6 +1,7 @@
 package com.teatro.modelo;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,23 +33,36 @@ public class Butaca implements Serializable{
 	
 	private int numero;
 
-	private boolean ocupada = false;
-
 	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "show_id")
 	@NotNull
 	private Show show;
 
+	@JsonBackReference
 	@ManyToOne
 	private Tiket tiket;
 
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "seccion_id")
 	private Seccion seccion;
-	
-	public void ocuparButaca() {
-		this.ocupada = true;
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Butaca other = (Butaca) obj;
+		return fila == other.fila && numero == other.numero;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(fila, numero);
 	}
 }
 

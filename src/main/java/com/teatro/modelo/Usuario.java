@@ -66,6 +66,7 @@ public class Usuario implements Serializable {
 
 	@Min(18)
 	@Max(120)
+	@NotNull
 	private int edad;
 
 	@CreatedDate

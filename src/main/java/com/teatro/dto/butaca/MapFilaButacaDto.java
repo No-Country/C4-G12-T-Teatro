@@ -12,5 +12,4 @@ public class MapFilaButacaDto {
 	private Map<Integer,Integer[]> butacas;
 	
 	private int cantidad;
-	
 }

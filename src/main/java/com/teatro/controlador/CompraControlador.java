@@ -11,14 +11,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.teatro.dto.butaca.MapFilaButacaDto;
+import com.teatro.dto.usuario.DatosUsuarioCompraDto;
 import com.teatro.modelo.Promocion;
+import com.teatro.modelo.Show;
 import com.teatro.modelo.Tiket;
 import com.teatro.modelo.Usuario;
 import com.teatro.seguridad.JwtProveedor;
 import com.teatro.servicio.CompraServicio;
 import com.teatro.servicio.PromocionServicio;
 import com.teatro.servicio.ShowServicio;
-import com.teatro.servicio.TiketServicio;
 import com.teatro.servicio.UsuarioServicio;
 
 import lombok.RequiredArgsConstructor;
@@ -29,7 +31,6 @@ import lombok.RequiredArgsConstructor;
 public class CompraControlador {
 
 	private final JwtProveedor jwtProveedor;
-	private final TiketServicio tiketServicio;
 	private final UsuarioServicio usuarioServicio;
 	private final PromocionServicio promocionServicio;
 	private final ShowServicio showServicio;
@@ -39,42 +40,73 @@ public class CompraControlador {
 	public ResponseEntity<Tiket> comprarPromocion(
 			@PathVariable Long idPromocion,
 			@RequestBody(required = true) MapFilaButacaDto butacas,
-			@RequestBody(required = false) DatosUsuarioCompraDto datosUsuario,
-			HttpServletRequest request){
-		//Logica Mercado Pago para hacer la compra y si es correcto seguir con el proceso de compra
-		
-		String token = obtenerTokenDeLaRequest(request);
-		
-		if ((!StringUtils.hasText(token) || !jwtProveedor.esValido(token)) && datosUsuario ==null ) {
+			@RequestBody(required = false) DatosUsuarioCompraDto datosUsuario, HttpServletRequest request) {
+
+		String token = jwtProveedor.obtenerTokenDeLaRequest(request);
+
+		if ((!StringUtils.hasText(token) || !jwtProveedor.esValido(token)) && datosUsuario == null) {
 			return ResponseEntity.badRequest().build();
 		}
-		if(StringUtils.hasText(token)) {
+		Tiket tiket;
+		
+		if (StringUtils.hasText(token)) {
 			Long idUsuario = jwtProveedor.obtenerIdDeJWT(token);
 			Usuario usuario = usuarioServicio.buscarPorId(idUsuario).get();
-			Promocion promocion = promocionServicio.buscarPorId(idPromocion).get();
-			Tiket tiket = compraServicio.comprar(usuario, promocion, butacas);
-			
-			return ResponseEntity.status(HttpStatus.CREATED).body(tiket);
-		}else {
-			
+			Promocion promocion = promocionServicio.buscarPorId(idPromocion).orElseThrow();
+			tiket = compraServicio.comprar(usuario, promocion, butacas);
+
+		} else {
+			if(datosUsuario.getEdad() < 18) {
+				new ResponseEntity<Tiket>( HttpStatus.BAD_REQUEST);
+			}
+				
+			Promocion promocion = promocionServicio.buscarPorId(idPromocion).orElseThrow();
+			tiket = compraServicio.comprar(promocion, butacas);
+			tiket.setNombreCompleto(datosUsuario.getNombre() + " " + datosUsuario.getApellido());	
 		}
+		if(tiket.esNulo()) {
+			throw new Exception();
+		}
+		
+		//enviar mail con la factura de la compra
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(tiket);
 	}
 
 	@PostMapping("/show/{idShow}")
-	public ResponseEntity<Tiket> comprarShow() {
-		// Logica Mercado Pago para hacer la compra y si es correcto seguir con el
-		// proceso de compra
+	public ResponseEntity<Tiket> comprarShow(
+			@PathVariable Long idShow,
+			@RequestBody(required = true) MapFilaButacaDto butacas,
+			@RequestBody(required = false) DatosUsuarioCompraDto datosUsuario, HttpServletRequest request) {
+		
+		
+		
+		String token = jwtProveedor.obtenerTokenDeLaRequest(request);
 
-	}
-
-
-	private String obtenerTokenDeLaRequest(HttpServletRequest request) {
-		String bearerToken = request.getHeader(JwtProveedor.TOKEN_HEADER);
-
-		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(JwtProveedor.TOKEN_PREFIX)) {
-			return bearerToken.substring(JwtProveedor.TOKEN_PREFIX.length(), bearerToken.length());
+		if ((!StringUtils.hasText(token) || !jwtProveedor.esValido(token)) && datosUsuario == null) {
+			return ResponseEntity.badRequest().build();
 		}
-
-		return null;
+		Tiket tiket;
+		
+		if (StringUtils.hasText(token)) {
+			Long idUsuario = jwtProveedor.obtenerIdDeJWT(token);
+			Usuario usuario = usuarioServicio.buscarPorId(idUsuario).get();
+			Show show = showServicio.buscarPorId(idShow).orElseThrow();
+			tiket = compraServicio.comprar(usuario, show, butacas);
+		} else {
+			
+			if(datosUsuario.getEdad() < 18) {
+				new ResponseEntity<Tiket>( HttpStatus.BAD_REQUEST);
+			}	
+			Show show = showServicio.buscarPorId(idShow).orElseThrow();
+			tiket = compraServicio.comprar(show, butacas);
+			tiket.setNombreCompleto(datosUsuario.getNombre() + " " + datosUsuario.getApellido());	
+		}
+		if(tiket.esNulo()) {
+			throw new Exception();
+		}
+		//enviar mail con la factura de la compra
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(tiket);
 	}
 }

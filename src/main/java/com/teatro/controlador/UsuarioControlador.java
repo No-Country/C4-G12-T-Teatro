@@ -64,6 +64,9 @@ public class UsuarioControlador {
 			@PageableDefault(size = 20, page = 0, direction = Direction.ASC, sort = {"nombre", "apellido"}) Pageable pageable
 			, HttpServletRequest request
 			){
+		String token = jwtProveedor.obtenerTokenDeLaRequest(request);
+		
+		if(jwtProveedor.obtenerRolesDeJWT(token).contains(RolUsuario.ROLE_ADMIN.name())) {
 		Page<Usuario> usuarios = usuarioServicio.buscarPorArgs(nombre, apellido, email, edad, preferencia, pageable);
 
 		if (usuarios.isEmpty()) {
@@ -76,6 +79,14 @@ public class UsuarioControlador {
 		
 		return ResponseEntity.ok().header("link", paginacionLinks.crearLinkHeader(usuarios, builder))
 				.body(getUsuarioDtos);
+		}
+		else {
+			Long idUsuario = jwtProveedor.obtenerIdDeJWT(token);
+			Usuario usuario = usuarioServicio.buscarPorId(idUsuario).get();
+			GetUsuarioDto getUsuarioDto = converter.convertirUsuarioAGetUsuarioDto(usuario);
+			
+			return ResponseEntity.ok(Arrays.asList(getUsuarioDto));
+		}
 	}
 	
 	@GetMapping("/{id}")

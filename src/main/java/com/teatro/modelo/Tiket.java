@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -43,10 +44,10 @@ public class Tiket implements Serializable {
 	@Column(name = "fecha_compra")
 	@CreatedDate
 	LocalDate fechaCompra;
-
+	
 	@Size(max = 100)
-	@Column(name = "descripcion")
-	private String descripcion;
+	@NotBlank
+	private String nombreCompleto;
 
 	@NotNull
 	@Min(1)
@@ -61,7 +62,6 @@ public class Tiket implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "show_id")
 	private Show show;
-
 
 	@ManyToOne
 	@JoinColumn(name= "usuario_id")

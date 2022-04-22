@@ -1,6 +1,7 @@
 package com.teatro.controlador;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -48,7 +49,7 @@ public class SalaControlador {
 	private final ShowServicio showServicio;
 
 	@GetMapping
-	public ResponseEntity<List<Sala>> listar(
+	public ResponseEntity<List<GetSalaDto>> listar(
 			@PageableDefault(page = 0, size = 50)Pageable pageable, HttpServletRequest request) {
 		Page<Sala> salas = salaService.buscarTodos(pageable);
 		
@@ -56,9 +57,12 @@ public class SalaControlador {
 			return ResponseEntity.notFound().build();	
 		}
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(request.getRequestURL().toString());
+		List<GetSalaDto> getSalaDtos = salas.getContent().stream()
+													.map(converter::convertirSalaAGetSalaDto)
+													.collect(Collectors.toList());
 		
 		return ResponseEntity.status(HttpStatus.OK).header("link", paginacionLinks.crearLinkHeader(salas, builder))
-				.body(salas.getContent());
+				.body(getSalaDtos);
 	}
 	
 	@GetMapping("/{nombre}")
