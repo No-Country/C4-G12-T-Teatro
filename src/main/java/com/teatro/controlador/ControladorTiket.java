@@ -1,11 +1,14 @@
 package com.teatro.controlador;
-import java.awt.event.TextEvent;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
+
+import com.teatro.dto.Tiket.TiketDto;
 import com.teatro.modelo.Usuario;
 import com.teatro.modelo.objetonulo.TiketNulo;
 import com.teatro.modelo.objetonulo.UsuarioNulo;
 import com.teatro.servicio.UsuarioServicio;
+import com.teatro.util.converter.ShowDtoConverter;
+import com.teatro.util.converter.TiketConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import com.teatro.modelo.Tiket;
 import com.teatro.servicio.TiketServicio;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.websocket.server.PathParam;
 
 @RequiredArgsConstructor
 @RestController
@@ -23,6 +24,9 @@ import javax.websocket.server.PathParam;
 public class ControladorTiket {
     private  final UsuarioServicio usuarioServicio;
     private final TiketServicio tiketService;
+    private final TiketConverter converter;
+
+
     @PostMapping("/new")
     public ResponseEntity<?>  crear(@Valid @RequestBody Tiket tiketNuevo, BindingResult bindingResult){
     	if (bindingResult.hasErrors())
@@ -33,10 +37,19 @@ public class ControladorTiket {
     // listar todos TIKET
     @GetMapping("")
     @ResponseBody
-    public List<Tiket>tiket(){
-        return tiketService.buscarTodos();
+    public ResponseEntity<List<TiketDto>> tiket(){
+
+        List<Tiket> t = tiketService.listarTikets();
+        if (!t.isEmpty())
+         return ResponseEntity.ok(t.stream().map(converter::traerTiketsDTO).collect(Collectors.toList()));
+
+        return  new ResponseEntity("No existen elementos",HttpStatus.NOT_FOUND);
+
     }
-    //ELIMINAR TIKET
+    //ELIMINAR TIKETd
+
+
+
 
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity eliminar(@Valid @PathVariable("id") Long id, BindingResult bindingResult){
@@ -56,23 +69,22 @@ public class ControladorTiket {
     @ResponseBody
     public ResponseEntity<List<Tiket>> buscarPorComprador(@PathVariable("comparator") Long comprado ){
                   Usuario usuario = usuarioServicio.buscarPorId(comprado).orElse(UsuarioNulo.construir());
-
                          if (!usuario.esNulo()) {
                              return ResponseEntity.ok(tiketService.buscarPorComprador(usuario));
                          }
                      return new ResponseEntity("No Existe el usuario",HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/comprador/{nombre}")
+    @GetMapping("/comprador/buscarNombre/{comparator}")
     @ResponseBody
-    public ResponseEntity<List<Tiket>> buscarPorNombreTiket(@PathVariable("nombre") Long nombre ){
-        Usuario usuario = usuarioServicio.buscarPorId(nombre).orElse(UsuarioNulo.construir());
-
-        if (!usuario.esNulo()) {
-            return ResponseEntity.ok(tiketService.buscarPorComprador(usuario));
+    public ResponseEntity<List<TiketDto>> buscarPorNombre(@PathVariable("comparator") String comprado ){
+        List<Tiket>  l =  tiketService.buscarPorNombre(comprado);
+        if (!l.isEmpty()){
+            return   ResponseEntity.ok(l.stream().map(converter::traerTiketsDTO).collect(Collectors.toList()));
         }
-        return new ResponseEntity("No Existe",HttpStatus.NOT_FOUND);
+        return new ResponseEntity("No Existe el usuario",HttpStatus.NOT_FOUND);
     }
+
 
 
 }

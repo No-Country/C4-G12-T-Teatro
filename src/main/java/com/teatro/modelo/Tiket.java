@@ -50,9 +50,9 @@ public class Tiket implements Serializable {
 	private float precio;
 
 	@NotNull
-	@Size
-	private  String NombreApelido;
-
+	@Size(max=100)
+	@Column (name = "nombre_apellido")
+	private  String nombreApellido;
 
 
 	@NotNull

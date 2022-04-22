@@ -21,12 +21,22 @@ public class TiketServicio extends BaseServicio<Tiket, Long, TiketRepositorio> {
 	}
 
 
+
 	public List<Tiket> buscarPorComprador(Usuario comprador) {
 		return repositorio.findByComprador(comprador);
 	}
 
 
-	public List<Tiket> buscarPorNombre(Usuario nombre) {
-		return repositorio.findByNombre(nombre);
+	public List<Tiket> listarTikets() {
+		return repositorio.findAll();
 	}
+
+
+	public List<Tiket> buscarPorNombre(String tiket)
+	{
+		return repositorio.findByNombreApellido(tiket);
+	}
+
+
+
 }

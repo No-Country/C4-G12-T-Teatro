@@ -126,4 +126,6 @@ public class UsuarioServicio  extends BaseServicio<Usuario, Long, UsuarioReposit
 	public boolean existePorEmail(String email) {
 		return this.repositorio.existsByEmail(email);
 	}
+
+
 }
