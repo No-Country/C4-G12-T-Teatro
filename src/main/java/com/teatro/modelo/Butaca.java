@@ -43,11 +43,6 @@ public class Butaca implements Serializable{
 	@ManyToOne
 	private Tiket tiket;
 
-	@JsonBackReference
-	@ManyToOne
-	@JoinColumn(name = "seccion_id")
-	private Seccion seccion;
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.teatro.dto.butaca.MapFilaButacaDto;
 import com.teatro.dto.usuario.DatosUsuarioCompraDto;
+import com.teatro.error.exceptions.PagoNoExitosoException;
 import com.teatro.modelo.Promocion;
 import com.teatro.modelo.Show;
 import com.teatro.modelo.Tiket;
@@ -65,7 +66,7 @@ public class CompraControlador {
 			tiket.setNombreCompleto(datosUsuario.getNombre() + " " + datosUsuario.getApellido());	
 		}
 		if(tiket.esNulo()) {
-			throw new Exception();
+			throw new PagoNoExitosoException();
 		}
 		
 		//enviar mail con la factura de la compra
@@ -103,7 +104,7 @@ public class CompraControlador {
 			tiket.setNombreCompleto(datosUsuario.getNombre() + " " + datosUsuario.getApellido());	
 		}
 		if(tiket.esNulo()) {
-			throw new Exception();
+			throw new PagoNoExitosoException();
 		}
 		//enviar mail con la factura de la compra
 		

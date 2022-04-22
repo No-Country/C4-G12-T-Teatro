@@ -22,6 +22,8 @@ import javax.validation.constraints.Size;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -55,6 +57,12 @@ public class Tiket implements Serializable {
 	private float precio;
 
 	@NotNull
+	@Size(max=100)
+	@Column (name = "nombre_apellido")
+	private  String nombreApellido;
+
+
+	@NotNull
 	@Min(1)
 	@Column(name = "cantidad_entradas")
 	private int cantidadEntradas;
@@ -63,6 +71,7 @@ public class Tiket implements Serializable {
 	@JoinColumn(name = "show_id")
 	private Show show;
 
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name= "usuario_id")
 	private Usuario comprador;
@@ -70,4 +79,7 @@ public class Tiket implements Serializable {
 	@OneToMany(mappedBy = "tiket")
 	private List<Butaca> butacas;
 
+	public boolean esNulo() {
+		return false;
+	}
 }

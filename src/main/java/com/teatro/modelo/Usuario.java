@@ -27,6 +27,7 @@ import javax.validation.constraints.Size;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.teatro.util.enumerados.RolUsuario;
 
 import lombok.AllArgsConstructor;
@@ -80,7 +81,8 @@ public class Usuario implements Serializable {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
 	private List<RolUsuario> roles;
-
+	
+	@JsonManagedReference
 	@OneToMany(mappedBy = "comprador")
 	private List<Tiket> compras;
 
