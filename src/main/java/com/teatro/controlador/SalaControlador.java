@@ -27,6 +27,7 @@ import com.teatro.dto.sala.CrearSalaDto;
 import com.teatro.dto.sala.EditarSalaDto;
 import com.teatro.dto.sala.GetSalaDto;
 import com.teatro.error.exceptions.LaSalaYaTieneUnShowEnEseHorarioException;
+import com.teatro.error.exceptions.PromocionNoEncontradaException;
 import com.teatro.error.exceptions.ShowNoEncontradoException;
 import com.teatro.error.exceptions.ShowYaTieneUnaSalaException;
 import com.teatro.error.exceptions.ValidacionException;
@@ -127,8 +128,8 @@ public class SalaControlador {
 	public ResponseEntity<Sala> agregarShowASala(
 			@PathVariable String nombreSala,
 			@PathVariable Long idShow){
-		Sala sala = salaService.buscarPorNombre(nombreSala).orElseThrow();
-		Show show = showServicio.buscarPorId(idShow).orElseThrow();
+		Sala sala = salaService.buscarPorNombre(nombreSala).orElseThrow(() -> new PromocionNoEncontradaException(nombreSala));
+		Show show = showServicio.buscarPorId(idShow).orElseThrow(() -> new ShowNoEncontradoException(idShow));
 		
 		if(show.tieneSala()) {
 			throw new ShowYaTieneUnaSalaException(show.getTitulo());
@@ -150,7 +151,7 @@ public class SalaControlador {
 	public ResponseEntity<Show> eliminarShowASala(
 			@PathVariable String nombreSala,
 			@PathVariable Long idShow){
-		Sala sala = salaService.buscarPorNombre(nombreSala).orElseThrow();
+		Sala sala = salaService.buscarPorNombre(nombreSala).orElseThrow(() -> new PromocionNoEncontradaException(nombreSala));
 		Show show = showServicio.buscarPorId(idShow).orElseThrow(() -> new ShowNoEncontradoException(idShow));
 		
 		if(show.noTieneA(sala)) {

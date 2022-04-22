@@ -15,7 +15,7 @@
 	<name>Teatro_No_Country</name>
 	<description>Proyecto de No Country</description>
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>11</java.version>
 	</properties>
 	<dependencies>
 		<dependency>

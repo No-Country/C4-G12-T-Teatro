@@ -1,19 +1,24 @@
 package com.teatro.dto.Tiket;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TiketDto implements Serializable {
+public class TiketDto{
+	
     private LocalDate local;
     @NotNull
     @Min(1)
@@ -38,8 +43,9 @@ public class TiketDto implements Serializable {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class ButacaDto implements Serializable {
+    public static class ButacaDto{
         private Long id;
-        private boolean ocupada = false;
+        private int fila;
+        private int numero;
     }
 }
