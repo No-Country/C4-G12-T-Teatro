@@ -81,6 +81,18 @@ public class ShowControlador {
 		
 		return ResponseEntity.ok(getShowDto);
 	}
+	
+	@GetMapping("/{id}/butacas")
+	public ResponseEntity<Map<Integer,Butaca[]>> obtenerButacasDisponibles(
+			@PathVariable Long id){
+		Show show = showServicio.buscarPorId(id).orElse(ShowNulo.construir());
+		
+		if (show.esNulo()) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		return ResponseEntity.ok(show.getMapaButacas());
+	}
 
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Show> nuevoShow(
@@ -139,17 +151,4 @@ public class ShowControlador {
 			return ResponseEntity.noContent().build();
 		}
 	}
-	
-	@GetMapping("/{id}/butacas")
-	public ResponseEntity<Map<Integer,Butaca[]>> obtenerButacasDisponibles(
-			@PathVariable Long id){
-		Show show = showServicio.buscarPorId(id).orElse(ShowNulo.construir());
-		
-		if (show.esNulo()) {
-			return ResponseEntity.notFound().build();
-		}
-		
-		return ResponseEntity.ok(show.getMapaButacas());
-	}
-	
 }

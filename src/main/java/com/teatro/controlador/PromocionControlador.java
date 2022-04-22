@@ -43,7 +43,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("promociones")
+@RequestMapping("/promociones")
 public class PromocionControlador {
 
 	private final PromocionServicio promocionServicio;
@@ -129,19 +129,6 @@ public class PromocionControlador {
 
 		return ResponseEntity.noContent().build();
 	}
-//<<<<<<< HEAD
-////
-////	@PutMapping(name = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-////	public ResponseEntity<Promocion> editarPromocion(@PathVariable Long id,
-////			@RequestPart("promocion") CrearPromocionDto promocionDto, @RequestPart("imagen") MultipartFile imagen) {
-////		Promocion promocion = promocionServicio.editar(id,promocionDto, imagen);
-////		if (promocion.esNula()) {
-////			return ResponseEntity.notFound().build();
-////		}
-////
-////		return ResponseEntity.ok().body(promocion);
-////	}
-//=======
 	
 	@PostMapping("/{idPromocion}/shows/{idShow}")
 	public ResponseEntity<GetPromocionDto> agregarShowAPromocion(
@@ -158,5 +145,4 @@ public class PromocionControlador {
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(converter.convertirPromocionAGetPromocionDto(promocion));
 	}
-//>>>>>>> origin/Desarrollo
 }

@@ -1,5 +1,6 @@
 package com.teatro.controlador;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.teatro.dto.sala.CrearSalaDto;
 import com.teatro.dto.sala.EditarSalaDto;
 import com.teatro.dto.sala.GetSalaDto;
+import com.teatro.error.exceptions.LaSalaYaTieneUnShowEnEseHorarioException;
 import com.teatro.error.exceptions.ShowNoEncontradoException;
 import com.teatro.error.exceptions.ShowYaTieneUnaSalaException;
 import com.teatro.error.exceptions.ValidacionException;
@@ -131,6 +133,13 @@ public class SalaControlador {
 		if(show.tieneSala()) {
 			throw new ShowYaTieneUnaSalaException(show.getTitulo());
 		}
+		LocalDateTime desde = show.getFechaShow();
+		LocalDateTime hasta = desde.plusMinutes(show.getDuracionMinShow());
+		
+		if(showServicio.tieneLaSalaShowEntreHorarios(show.getSala(), desde, hasta)) {
+			throw new LaSalaYaTieneUnShowEnEseHorarioException(show.getSala(), desde, hasta);
+		}
+		
 		show.agregarA(sala);
 		showServicio.guardar(show);
 		

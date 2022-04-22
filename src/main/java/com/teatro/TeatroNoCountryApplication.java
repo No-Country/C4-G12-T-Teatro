@@ -71,11 +71,17 @@ public class TeatroNoCountryApplication {
 
 			promocionServicio.guardar(promo1);
 			
-			Usuario us = new Usuario(null, "Pepe Jose", "Hernandes", "hernandes@gmail.com", "123456", null, 22, LocalDateTime.now(), categoria2, Arrays.asList(RolUsuario.ROLE_ADMIN), null);
+			Usuario us = new Usuario(null, "Pepe Jose", "Hernandes", "hernandes@gmail.com", "123456", null, 22, LocalDateTime.now(), categoria2, Arrays.asList(RolUsuario.ROLE_USER), null);
 			
 			us.setContrasena(encoder.encode(us.getContrasena()));
 			
 			usuarioServicio.guardar(us);
+			
+			Usuario us1 = new Usuario(null, "Martin", "Iriarte", "martincho@gmail.com", "34770296", null, 22, LocalDateTime.now(), categoria2, Arrays.asList(RolUsuario.ROLE_ADMIN), null);
+			
+			us1.setContrasena(encoder.encode(us1.getContrasena()));
+			
+			usuarioServicio.guardar(us1);
 			
 			Sala sala = new Sala();
 			

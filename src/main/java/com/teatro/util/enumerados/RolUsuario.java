@@ -3,5 +3,15 @@ package com.teatro.util.enumerados;
 
 public enum RolUsuario {
 
-	ROLE_ADMIN , ROLE_USER, ROLE_GUEST, ROLE_SELLER
+	ROLE_ADMIN("ADMIN"), ROLE_USER("USER"),  ROLE_SELLER("SELLER");
+	
+	private String rol;
+	
+	private RolUsuario(String rol) {
+		this.rol = rol;
+	}
+	
+	public String getRol() {
+		return this.rol;
+	}
 }
