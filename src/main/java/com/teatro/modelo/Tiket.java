@@ -46,10 +46,6 @@ public class Tiket implements Serializable {
 	@Column(name = "fecha_compra")
 	@CreatedDate
 	LocalDate fechaCompra;
-	
-	@Size(max = 100)
-	@NotBlank
-	private String nombreCompleto;
 
 	@NotNull
 	@Min(1)

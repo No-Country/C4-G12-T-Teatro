@@ -63,7 +63,7 @@ public class CompraControlador {
 				
 			Promocion promocion = promocionServicio.buscarPorId(idPromocion).orElseThrow();
 			tiket = compraServicio.comprar(promocion, butacas);
-			tiket.setNombreCompleto(datosUsuario.getNombre() + " " + datosUsuario.getApellido());	
+			tiket.setNombreApellido(datosUsuario.getNombre() + " " + datosUsuario.getApellido());	
 		}
 		if(tiket.esNulo()) {
 			throw new PagoNoExitosoException();
@@ -101,7 +101,7 @@ public class CompraControlador {
 			}	
 			Show show = showServicio.buscarPorId(idShow).orElseThrow();
 			tiket = compraServicio.comprar(show, butacas);
-			tiket.setNombreCompleto(datosUsuario.getNombre() + " " + datosUsuario.getApellido());	
+			tiket.setNombreApellido(datosUsuario.getNombre() + " " + datosUsuario.getApellido());	
 		}
 		if(tiket.esNulo()) {
 			throw new PagoNoExitosoException();

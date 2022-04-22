@@ -50,7 +50,7 @@ public class CompraServicio {
 										.comprador(usuario)
 										.precio(precioTotal)
 										.butacas(butacasTiket)
-										.nombreCompleto(usuario.getNombre() + " " + usuario.getApellido())
+										.nombreApellido(usuario.getNombre() + " " + usuario.getApellido())
 										.show(show)
 										.build();
 		
@@ -86,7 +86,7 @@ public class CompraServicio {
 										.comprador(null)
 										.precio(precioTotal)
 										.butacas(butacasTiket)
-										.nombreCompleto("invitado")
+										.nombreApellido("invitado")
 										.show(show)
 										.build();
 		
@@ -123,7 +123,7 @@ public class CompraServicio {
 										.comprador(usuario)
 										.precio(precioTotal)
 										.butacas(butacasTiket)
-										.nombreCompleto(usuario.getNombre() + " " + usuario.getApellido())
+										.nombreApellido(usuario.getNombre() + " " + usuario.getApellido())
 										.show(show)
 										.build();
 		
@@ -157,7 +157,7 @@ public class CompraServicio {
 										.comprador(null)
 										.precio(precioTotal)
 										.butacas(butacasTiket)
-										.nombreCompleto("invitado")
+										.nombreApellido("invitado")
 										.show(show)
 										.build();
 		
