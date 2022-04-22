@@ -1,12 +1,14 @@
 package com.teatro.seguridad;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -42,14 +44,14 @@ public class JwtProveedor {
 
 	
 
-	public String generarToken(String email) {
-		Usuario usuario = usuarioServicio.buscarPorEmail(email)
-							.orElseThrow(() -> new UsuarioNoEncontradoException(email));
+	public String generarToken(String username) {
+		Usuario usuario = usuarioServicio.buscarPorEmail(username)
+							.orElseThrow(() -> new UsuarioNoEncontradoException(username));
 		
 		Date fechaExpiracionToken = new Date(System.currentTimeMillis() + (jwtDuracionEnSeg * 100));
-		String rolesConFormato = usuario.getRoles().stream()
+		List<String> rolesConFormato = usuario.getRoles().stream()
 													.map(RolUsuario::name)
-													.collect(Collectors.joining(", "));
+													.collect(Collectors.toList());
 		
 		return JWT.create().withHeader(Map.of("type", TOKEN_TYPE))
 							.withSubject(Long.toString(usuario.getId()))
@@ -94,6 +96,16 @@ public class JwtProveedor {
 			log.info("Token JWT no soportado: " + e.getMessage());
 		}
 		return false;
+	}
+	
+	public String obtenerTokenDeLaRequest(HttpServletRequest request) {
+		String bearerToken = request.getHeader(JwtProveedor.TOKEN_HEADER);
+
+		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(JwtProveedor.TOKEN_PREFIX)) {
+			return bearerToken.substring(JwtProveedor.TOKEN_PREFIX.length(), bearerToken.length());
+		}
+
+		return null;
 	}
 	
 	private Algorithm construirAlgotirmo() {

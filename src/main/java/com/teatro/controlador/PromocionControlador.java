@@ -2,6 +2,7 @@ package com.teatro.controlador;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,8 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.teatro.dto.promocion.CrearPromocionDto;
+import com.teatro.dto.promocion.GetPromocionDto;
 import com.teatro.error.exceptions.PromocionNoEncontradaException;
-import com.teatro.error.exceptions.PromocionNoTieneAShowException;
 import com.teatro.error.exceptions.PromocionYaTieneAShowException;
 import com.teatro.error.exceptions.ShowNoEncontradoException;
 import com.teatro.error.exceptions.ValidacionException;
@@ -42,7 +43,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("promociones")
+@RequestMapping("/promociones")
 public class PromocionControlador {
 
 	private final PromocionServicio promocionServicio;
@@ -51,7 +52,7 @@ public class PromocionControlador {
 	private final ShowServicio showServicio;
 
 	@GetMapping
-	public ResponseEntity<List<Promocion>> obtenerPromociones(
+	public ResponseEntity<List<GetPromocionDto>> obtenerPromociones(
 			@RequestParam("titulo") Optional<String> titulo,
 			@RequestParam("fecha") Optional<String> fechaShow,
 			@RequestParam("categoria") Optional<String> categoriaNombre,
@@ -62,9 +63,12 @@ public class PromocionControlador {
 			return ResponseEntity.notFound().build();
 		}
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(request.getRequestURL().toString());
-
+		List<GetPromocionDto> getPromocionDtos = promociones.getContent().stream()
+															.map(converter::convertirPromocionAGetPromocionDto)
+															.collect(Collectors.toList());
+		
 		return ResponseEntity.ok().header("link", paginacionLinks.crearLinkHeader(promociones, builder))
-				.body(promociones.getContent());
+				.body(getPromocionDtos);
 	}
 
 	@GetMapping("/{id}")
@@ -121,14 +125,13 @@ public class PromocionControlador {
 		if (promocion.esNula()) {
 			return ResponseEntity.notFound().build();
 		}
-
 		promocionServicio.borrar(promocion);
 
 		return ResponseEntity.noContent().build();
 	}
 	
 	@PostMapping("/{idPromocion}/shows/{idShow}")
-	public ResponseEntity<Promocion> agregarShowAPromocion(
+	public ResponseEntity<GetPromocionDto> agregarShowAPromocion(
 			@PathVariable Long idPromocion,
 			@PathVariable Long idShow){
 		Promocion promocion = promocionServicio.buscarPorId(idPromocion).orElseThrow(() -> new PromocionNoEncontradaException(idPromocion));
@@ -138,22 +141,8 @@ public class PromocionControlador {
 			throw new PromocionYaTieneAShowException(show.getTitulo());
 		}
 		promocion.agregarA(show);
+		promocionServicio.guardar(promocion);
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(promocionServicio.guardar(promocion));
-	}
-	
-	@DeleteMapping("/{idPromocion}/shows/{idShow}")
-	public ResponseEntity<Promocion> eliminarShowAPromocion(
-			@PathVariable Long idPromocion,
-			@PathVariable Long idShow){
-		Promocion promocion = promocionServicio.buscarPorId(idPromocion).orElseThrow(() -> new PromocionNoEncontradaException(idPromocion));
-		Show show = showServicio.buscarPorId(idShow).orElseThrow(() -> new ShowNoEncontradoException(idShow));
-		
-		if(!promocion.contieneA(show)) {
-			throw new PromocionNoTieneAShowException(show.getTitulo());
-		}
-		promocion.eliminarA(show);
-		
-		return ResponseEntity.status(HttpStatus.CREATED).body(promocionServicio.guardar(promocion));
+		return ResponseEntity.status(HttpStatus.CREATED).body(converter.convertirPromocionAGetPromocionDto(promocion));
 	}
 }

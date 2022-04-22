@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import com.teatro.controlador.FicheroControlador;
+import com.teatro.modelo.Sala;
 import com.teatro.modelo.Show;
 import com.teatro.repositorio.ShowRepositorio;
 import com.teatro.servicio.base.BaseServicio;
@@ -44,7 +45,7 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 				if (titulo.isPresent()) {
 					return criteriaBuilder.like(criteriaBuilder.lower(root.get("titulo")), "%" + titulo.get() + "%");
 				} else {
-					return criteriaBuilder.isTrue(criteriaBuilder.literal(true)); // No se filtra nada
+					return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
 				}
 			}
 		};
@@ -80,7 +81,7 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 
 			@Override
 			public Predicate toPredicate(Root<Show> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-				if (fechaShowString.isPresent()) {					
+				if (fechaShowString.isPresent()) {
 					LocalDateTime fechaShow = LocalDateTime.parse(fechaShowString.get(),FormateadorFecha.getFormateador());
 					return criteriaBuilder.greaterThanOrEqualTo(root.get("fechaShow"), fechaShow);
 				} else {
@@ -88,9 +89,8 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 				}
 			}
 		};
-
+		
 		Specification<Show> todas = specNombreShow.and(specPrecioMenorQue).and(specDeCategoria).and(specFechaMayorQue);
-
 		return this.repositorio.findAll(todas, pageable);
 	}
 
@@ -106,5 +106,9 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 			show.setUrlImagen(urlImagen);
 		}
 		return show;
+	}
+	
+	public boolean tieneLaSalaShowEntreHorarios(Sala sala, LocalDateTime desde, LocalDateTime hasta) {
+		return this.repositorio.existsByFechaShowBetweenAndSala(desde, hasta, sala);
 	}
 }

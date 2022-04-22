@@ -16,25 +16,22 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EditarUsuarioDto {
+public class DatosUsuarioCompraDto {
 
 	@NotBlank
 	@Size(max = 50)
 	private String nombre;
-
+	
 	@NotBlank
 	@Size(max = 50)
 	private String apellido;
-
+	
 	@Email
 	@NotNull
 	private String email;
-
+	
 	@Min(18)
 	@Max(120)
-	private int edad;
-
 	@NotNull
-	@Min(1)
-	private Long preferenciaId;
+	private int edad;
 }

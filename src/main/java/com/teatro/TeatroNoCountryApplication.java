@@ -13,11 +13,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.teatro.modelo.Categoria;
 import com.teatro.modelo.Promocion;
 import com.teatro.modelo.PromocionPorcentual;
+import com.teatro.modelo.Sala;
 import com.teatro.modelo.Show;
 import com.teatro.modelo.Usuario;
 import com.teatro.servicio.AlmacenamientoArchivoEnSistemaServicio;
 import com.teatro.servicio.CategoriaServicio;
 import com.teatro.servicio.PromocionServicio;
+import com.teatro.servicio.SalaServicio;
 import com.teatro.servicio.ShowServicio;
 import com.teatro.servicio.UsuarioServicio;
 import com.teatro.util.enumerados.RolUsuario;
@@ -33,7 +35,7 @@ public class TeatroNoCountryApplication {
 	@Bean
 	public CommandLineRunner init(PromocionServicio promocionServicio, ShowServicio showServicio,
 			AlmacenamientoArchivoEnSistemaServicio almacenamientoServicio, CategoriaServicio categoriaServicio,
-			UsuarioServicio usuarioServicio, BCryptPasswordEncoder encoder) {
+			UsuarioServicio usuarioServicio, BCryptPasswordEncoder encoder, SalaServicio salaServicio) {
 		return args -> {
 
 			almacenamientoServicio.deleteAll();
@@ -65,16 +67,33 @@ public class TeatroNoCountryApplication {
 			showServicio.guardar(show1);
 			showServicio.guardar(show2);
 
-			Promocion promo1 = new PromocionPorcentual("PromoPrueba", null, Arrays.asList(show1, show2), 20);
+			Promocion promo1 = new PromocionPorcentual("PromoPrueba", null, show1, 20);
 
 			promocionServicio.guardar(promo1);
 			
-			Usuario us = new Usuario(null, "Pepe Jose", "Hernandes", "hernandes@gmail.com", "123456", null, 22, LocalDateTime.now(), true, categoria2, Arrays.asList(RolUsuario.ROLE_USER), null);
+			Usuario us = new Usuario(null, "Pepe Jose", "Hernandes", "hernandes@gmail.com", "123456", null, 22, LocalDateTime.now(), categoria2, Arrays.asList(RolUsuario.ROLE_USER), null);
 			
 			us.setContrasena(encoder.encode(us.getContrasena()));
 			
 			usuarioServicio.guardar(us);
 			
+			Usuario us1 = new Usuario(null, "Martin", "Iriarte", "martincho@gmail.com", "34770296", null, 22, LocalDateTime.now(), categoria2, Arrays.asList(RolUsuario.ROLE_ADMIN), null);
+			
+			us1.setContrasena(encoder.encode(us1.getContrasena()));
+			
+			usuarioServicio.guardar(us1);
+			
+			Sala sala = new Sala();
+			
+			sala.setNombre("Sala1");
+			sala.setCapacidad(1000);
+			sala.setFilas(30);
+			
+			show1.setSala(sala);
+			
+			salaServicio.guardar(sala);
+			
+			showServicio.guardar(show1);
 		};
 	}
 

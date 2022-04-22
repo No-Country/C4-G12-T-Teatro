@@ -1,4 +1,4 @@
-package com.teatro.dto.promocion;
+package com.teatro.dto.show;
 
 import java.time.LocalDateTime;
 
@@ -14,22 +14,15 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetPromocionDto {
+public class GetShowDto {
 
 	private String titulo;
-	
-	private String urlImagen;
-	
-	private String showTitulo;	
-	
-	@JsonFormat(shape = Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
-	private LocalDateTime showFechaShow;
-	
-	private int showDuracionMinShow;
-	
-	private String descripcion;
-	
-	private String showCategoriaNombre;
-	
 	private float precio;
+	private String urlStrig;
+	@JsonFormat(shape = Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
+	private LocalDateTime fechaShow;
+	private int duracionMinShow;
+	private String descripcion;
+	private String categoriaNombre;
+	private String salaNombre;
 }

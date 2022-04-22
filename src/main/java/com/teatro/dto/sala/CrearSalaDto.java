@@ -1,6 +1,7 @@
-package com.teatro.dto.usuario;
+package com.teatro.dto.sala;
 
-import javax.validation.constraints.Email;
+import java.util.List;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -16,25 +17,31 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EditarUsuarioDto {
+public class CrearSalaDto {
 
 	@NotBlank
-	@Size(max = 50)
+	@Size(max = 60)
 	private String nombre;
 
-	@NotBlank
-	@Size(max = 50)
-	private String apellido;
-
-	@Email
+	@Min(100)
+	@Max(5000)
 	@NotNull
-	private String email;
+	private int capacidad;
 
-	@Min(18)
-	@Max(120)
-	private int edad;
-
+	@Min(10)
+	@Max(100)
 	@NotNull
-	@Min(1)
-	private Long preferenciaId;
+	private int filas;
+
+	private List<ShowIdDto> showsShowId;
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class ShowIdDto {
+
+		private Long id;
+		
+	}
 }
