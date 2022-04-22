@@ -13,4 +13,5 @@ public interface UsuarioRepositorio extends JpaRepository<Usuario, Long>, JpaSpe
 
 	boolean existsByEmail(String email);
 
+
 }

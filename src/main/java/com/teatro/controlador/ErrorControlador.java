@@ -14,8 +14,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.teatro.error.ApiError;
 import com.teatro.error.exceptions.AlmacenamientoArchivoNoEncontradoException;
 import com.teatro.error.exceptions.AlmacenamientoException;
+import com.teatro.error.exceptions.ButacaYaCompradaOInexistenteExeption;
 import com.teatro.error.exceptions.CategoriaNoEncontradaException;
 import com.teatro.error.exceptions.ContrasenasNoCoincidenException;
+import com.teatro.error.exceptions.LaSalaYaTieneUnShowEnEseHorarioException;
+import com.teatro.error.exceptions.PagoNoExitosoException;
 import com.teatro.error.exceptions.PromocionNoEncontradaException;
 import com.teatro.error.exceptions.PromocionNoTieneAShowException;
 import com.teatro.error.exceptions.PromocionYaTieneAShowException;
@@ -38,14 +41,15 @@ public class ErrorControlador extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler({ContrasenasNoCoincidenException.class, ShowYaTieneUnaSalaException.class,
 		PromocionNoTieneAShowException.class, PromocionYaTieneAShowException.class,
-		ShowYaTieneUnaSalaException.class})
+		ShowYaTieneUnaSalaException.class, PagoNoExitosoException.class})
 	public ResponseEntity<ApiError> requestErroneaException(RuntimeException exception){
 		return construirErrorResponseEntity(HttpStatus.BAD_REQUEST, exception.getMessage());
 	}
 	
-	@ExceptionHandler({UsuarioYaExisteException.class})
+	@ExceptionHandler({UsuarioYaExisteException.class, ButacaYaCompradaOInexistenteExeption.class,
+		LaSalaYaTieneUnShowEnEseHorarioException.class,})
 	public ResponseEntity<ApiError> conflitoErrores(RuntimeException exception){
-		return construirErrorResponseEntity(HttpStatus.BAD_REQUEST, exception.getMessage());
+		return construirErrorResponseEntity(HttpStatus.CONFLICT, exception.getMessage());
 	}
 	
 	@ExceptionHandler({ValidacionException.class})

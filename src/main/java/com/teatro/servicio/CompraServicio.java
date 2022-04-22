@@ -9,13 +9,13 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.teatro.dto.butaca.MapFilaButacaDto;
-import com.teatro.dto.usuario.DatosUsuarioCompraDto;
 import com.teatro.error.exceptions.ButacaYaCompradaOInexistenteExeption;
 import com.teatro.modelo.Butaca;
 import com.teatro.modelo.Promocion;
 import com.teatro.modelo.Show;
 import com.teatro.modelo.Tiket;
 import com.teatro.modelo.Usuario;
+import com.teatro.modelo.objetonulo.TiketNulo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -172,7 +172,7 @@ public class CompraServicio {
 	
 	private boolean esPagoConMercadoPagoExitoso() {
 		// Logica Mercado Pago para hacer la compra y si es correcto seguir con el
-				// proceso de compra
+		// proceso de compra
 		
 		return true;
 	}

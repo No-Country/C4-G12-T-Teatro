@@ -8,4 +8,8 @@ public class PromocionNoEncontradaException extends RuntimeException {
 		super("La promocion con id: " + idPromocion + " no fue encontrada.");
 	}
 
+	public PromocionNoEncontradaException(String nombreSala) {
+		super("La promocion " + nombreSala + " no fue encontrada.");
+	}
+
 }
