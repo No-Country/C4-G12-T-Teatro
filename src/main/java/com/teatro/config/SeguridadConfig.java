@@ -54,6 +54,7 @@ public class SeguridadConfig extends WebSecurityConfigurerAdapter {
 			.authorizeHttpRequests()
 				.antMatchers("/swagger-ui/**").permitAll()
 				.antMatchers("/login/**").permitAll()
+				.antMatchers("/usuarios/registrar").permitAll()
 				.antMatchers("/h2-console/**").permitAll()
 				.antMatchers(HttpMethod.POST, RutaUtilidades.COMPRAS).permitAll()
 				.antMatchers(HttpMethod.GET, RutaUtilidades.FICHERO).permitAll()
@@ -85,6 +86,8 @@ public class SeguridadConfig extends WebSecurityConfigurerAdapter {
 					.hasAnyRole(RolUsuario.ROLE_SELLER.getRol(), RolUsuario.ROLE_ADMIN.getRol())
 				.antMatchers(HttpMethod.DELETE, RutaUtilidades.SALAS)
 					.hasRole(RolUsuario.ROLE_ADMIN.getRol())
+					
+				.antMatchers(HttpMethod.GET, RutaUtilidades.TIKET).authenticated()
 					
 				.antMatchers(HttpMethod.GET, RutaUtilidades.USUARIOS).authenticated()
 			.anyRequest().hasRole(RolUsuario.ROLE_ADMIN.getRol());

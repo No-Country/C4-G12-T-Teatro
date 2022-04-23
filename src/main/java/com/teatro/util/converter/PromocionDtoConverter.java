@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import com.teatro.dto.promocion.CrearPromocionDto;
+import com.teatro.dto.promocion.EditarPromocionDto;
 import com.teatro.dto.promocion.GetPromocionDto;
 import com.teatro.modelo.Promocion;
 import com.teatro.modelo.PromocionPorcentual;
@@ -20,7 +21,7 @@ public class PromocionDtoConverter {
 		return mapper.map(promocionDto, PromocionPorcentual.class);
 	}
 
-	public Promocion convertirCrearPromocionDtoAPromocion(CrearPromocionDto promocionDto, Promocion promocion) {
+	public Promocion convertirEditarPromocionDtoAPromocion(EditarPromocionDto promocionDto, Promocion promocion) {
 		mapper.map(promocionDto, promocion);
 		return promocion;
 	}

@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.teatro.dto.promocion.CrearPromocionDto;
+import com.teatro.dto.promocion.EditarPromocionDto;
 import com.teatro.dto.promocion.GetPromocionDto;
 import com.teatro.error.exceptions.PromocionNoEncontradaException;
 import com.teatro.error.exceptions.PromocionYaTieneAShowException;
@@ -98,10 +99,10 @@ public class PromocionControlador {
 		return ResponseEntity.status(HttpStatus.CREATED).body(promocionServicio.guardar(promocion));
 	}
 	
-	@PutMapping(name = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Promocion> editarPromocion(
 			@PathVariable Long id,
-			@RequestPart("promocion") CrearPromocionDto promocionDto, 
+			@RequestPart("promocion") EditarPromocionDto promocionDto, 
 			Errors errores,
 			@RequestPart("imagen") MultipartFile imagen) {
 		
@@ -114,6 +115,8 @@ public class PromocionControlador {
 			return ResponseEntity.notFound().build();
 		}
 		promocion = promocionServicio.guardarImagenYagregarUrlImagen(promocion, imagen);
+		promocion = converter.convertirEditarPromocionDtoAPromocion(promocionDto, promocion);
+		promocion.setId(id);
 		
 		return ResponseEntity.ok().body(promocionServicio.editar(promocion));
 	}

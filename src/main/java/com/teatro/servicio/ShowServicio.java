@@ -111,4 +111,8 @@ public class ShowServicio extends BaseServicio<Show, Long, ShowRepositorio> {
 	public boolean tieneLaSalaShowEntreHorarios(Sala sala, LocalDateTime desde, LocalDateTime hasta) {
 		return this.repositorio.existsByFechaShowBetweenAndSala(desde, hasta, sala);
 	}
+	
+	public boolean tieneLaSalaShowEntreHorarios(Sala sala, LocalDateTime desde, LocalDateTime hasta, Long id) {
+		return this.repositorio.existsByFechaShowBetweenAndSalaAndIdNot(desde, hasta, sala, id);
+	}
 }

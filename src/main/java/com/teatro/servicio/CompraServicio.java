@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import com.teatro.dto.butaca.MapFilaButacaDto;
+import com.teatro.dto.compra.CompraDto;
 import com.teatro.error.exceptions.ButacaYaCompradaOInexistenteExeption;
 import com.teatro.modelo.Butaca;
 import com.teatro.modelo.Promocion;
@@ -24,15 +24,15 @@ import lombok.RequiredArgsConstructor;
 public class CompraServicio {
 	
 	private final TiketServicio tiketServicio;
-	private final ShowServicio showServicio;
+	private final ButacaServicio butacaServicio;
 	
 	@Transactional
-	public Tiket comprar(Usuario usuario, Promocion promocion, MapFilaButacaDto butacasCompradas) {
-		float precioTotal = promocion.getPrecio() * butacasCompradas.getCantidad();
+	public Tiket comprar(Usuario usuario, Promocion promocion, CompraDto datosCompra) {
+		float precioTotal = promocion.getPrecio() * datosCompra.getCantidad();
 		List<Butaca> butacasTiket = new ArrayList<>();
 		Show show = promocion.getShow();
 		
-		for (Entry<Integer, Integer[]> butacas : butacasCompradas.getButacas().entrySet()) {
+		for (Entry<Integer, Integer[]> butacas : datosCompra.getButacas().entrySet()) {
 			for (Integer butacaNumero : butacas.getValue()) {
 				Butaca butaca = new Butaca();
 				butaca.setFila(butacas.getKey());
@@ -42,33 +42,33 @@ public class CompraServicio {
 					throw new ButacaYaCompradaOInexistenteExeption(butaca);
 				}
 				
-				show.ocuparButaca(butaca);
+				butaca.setShow(show);
+				butacaServicio.guardar(butaca);
 				butacasTiket.add(butaca);
 			}
 		}
-		Tiket tiket = Tiket.builder().cantidadEntradas(butacasCompradas.getCantidad())
+		Tiket tiket = Tiket.builder().cantidadEntradas(datosCompra.getCantidad())
 										.comprador(usuario)
 										.precio(precioTotal)
 										.butacas(butacasTiket)
-										.nombreCompleto(usuario.getNombre() + " " + usuario.getApellido())
+										.nombreApellido(usuario.getNombre() + " " + usuario.getApellido())
 										.show(show)
 										.build();
 		
 		if(!esPagoConMercadoPagoExitoso()) {
 			return TiketNulo.construir();
 		}
-		showServicio.guardar(show);
 		
 		return tiketServicio.guardar(tiket);
 	}
 
 	@Transactional
-	public Tiket comprar(Promocion promocion, MapFilaButacaDto butacasCompradas) {
-		float precioTotal = promocion.getPrecio() * butacasCompradas.getCantidad();
+	public Tiket comprar(Promocion promocion, CompraDto datosCompra) {
+		float precioTotal = promocion.getPrecio() * datosCompra.getCantidad();
 		List<Butaca> butacasTiket = new ArrayList<>();
 		Show show = promocion.getShow();
 		
-		for (Entry<Integer, Integer[]> butacas : butacasCompradas.getButacas().entrySet()) {
+		for (Entry<Integer, Integer[]> butacas : datosCompra.getButacas().entrySet()) {
 			for (Integer butacaNumero : butacas.getValue()) {
 				Butaca butaca = new Butaca();
 				butaca.setFila(butacas.getKey());
@@ -78,15 +78,16 @@ public class CompraServicio {
 					throw new ButacaYaCompradaOInexistenteExeption(butaca);
 				}
 				
-				show.ocuparButaca(butaca);
+				butaca.setShow(show);
+				butacaServicio.guardar(butaca);
 				butacasTiket.add(butaca);
 			}
 		}
-		Tiket tiket = Tiket.builder().cantidadEntradas(butacasCompradas.getCantidad())
+		Tiket tiket = Tiket.builder().cantidadEntradas(datosCompra.getCantidad())
 										.comprador(null)
 										.precio(precioTotal)
 										.butacas(butacasTiket)
-										.nombreCompleto("invitado")
+										.nombreApellido("invitado")
 										.show(show)
 										.build();
 		
@@ -94,18 +95,18 @@ public class CompraServicio {
 		if(!esPagoConMercadoPagoExitoso()) {
 			return TiketNulo.construir();
 		}
-		showServicio.guardar(show);
+		
 		
 		return tiketServicio.guardar(tiket);
 	}
 
 	
 
-	public Tiket comprar(Usuario usuario, Show show, MapFilaButacaDto butacasCompradas) {
-		float precioTotal = show.getPrecio() * butacasCompradas.getCantidad();
+	public Tiket comprar(Usuario usuario, Show show,CompraDto datosCompra) {
+		float precioTotal = (show.getPrecio() * datosCompra.getCantidad());
 		List<Butaca> butacasTiket = new ArrayList<>();
 		
-		for (Entry<Integer, Integer[]> butacas : butacasCompradas.getButacas().entrySet()) {
+		for (Entry<Integer, Integer[]> butacas : datosCompra.getButacas().entrySet()) {
 			for (Integer butacaNumero : butacas.getValue()) {
 				Butaca butaca = new Butaca();
 				butaca.setFila(butacas.getKey());
@@ -115,31 +116,32 @@ public class CompraServicio {
 					throw new ButacaYaCompradaOInexistenteExeption(butaca);
 				}
 				
-				show.ocuparButaca(butaca);
+				butaca.setShow(show);
+				butacaServicio.guardar(butaca);
 				butacasTiket.add(butaca);
 			}
 		}
-		Tiket tiket = Tiket.builder().cantidadEntradas(butacasCompradas.getCantidad())
+		Tiket tiket = Tiket.builder().cantidadEntradas(datosCompra.getCantidad())
 										.comprador(usuario)
 										.precio(precioTotal)
 										.butacas(butacasTiket)
-										.nombreCompleto(usuario.getNombre() + " " + usuario.getApellido())
+										.nombreApellido(usuario.getNombre() + " " + usuario.getApellido())
 										.show(show)
 										.build();
 		
 		if(!esPagoConMercadoPagoExitoso()) {
 			return TiketNulo.construir();
 		}
-		showServicio.guardar(show);
+		
 		
 		return tiketServicio.guardar(tiket);
 	}
 
-	public Tiket comprar(Show show, MapFilaButacaDto butacasCompradas) {
-		float precioTotal = show.getPrecio() * butacasCompradas.getCantidad();
+	public Tiket comprar(Show show, CompraDto datosCompra) {
+		float precioTotal = (show.getPrecio() * datosCompra.getCantidad());
 		List<Butaca> butacasTiket = new ArrayList<>();
 		
-		for (Entry<Integer, Integer[]> butacas : butacasCompradas.getButacas().entrySet()) {
+		for (Entry<Integer, Integer[]> butacas : datosCompra.getButacas().entrySet()) {
 			for (Integer butacaNumero : butacas.getValue()) {
 				Butaca butaca = new Butaca();
 				butaca.setFila(butacas.getKey());
@@ -149,15 +151,16 @@ public class CompraServicio {
 					throw new ButacaYaCompradaOInexistenteExeption(butaca);
 				}
 				
-				show.ocuparButaca(butaca);
+				butaca.setShow(show);
+				butacaServicio.guardar(butaca);
 				butacasTiket.add(butaca);
 			}
 		}
-		Tiket tiket = Tiket.builder().cantidadEntradas(butacasCompradas.getCantidad())
+		Tiket tiket = Tiket.builder().cantidadEntradas(datosCompra.getCantidad())
 										.comprador(null)
 										.precio(precioTotal)
 										.butacas(butacasTiket)
-										.nombreCompleto("invitado")
+										.nombreApellido("invitado")
 										.show(show)
 										.build();
 		
@@ -165,7 +168,6 @@ public class CompraServicio {
 		if(!esPagoConMercadoPagoExitoso()) {
 			return TiketNulo.construir();
 		}
-		showServicio.guardar(show);
 		
 		return tiketServicio.guardar(tiket);
 	}

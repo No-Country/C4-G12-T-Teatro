@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -15,7 +16,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -46,10 +46,6 @@ public class Tiket implements Serializable {
 	@Column(name = "fecha_compra")
 	@CreatedDate
 	LocalDate fechaCompra;
-	
-	@Size(max = 100)
-	@NotBlank
-	private String nombreCompleto;
 
 	@NotNull
 	@Min(1)
@@ -67,16 +63,16 @@ public class Tiket implements Serializable {
 	@Column(name = "cantidad_entradas")
 	private int cantidadEntradas;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.REFRESH)
 	@JoinColumn(name = "show_id")
 	private Show show;
 
 	@JsonBackReference
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.REFRESH)
 	@JoinColumn(name= "usuario_id")
 	private Usuario comprador;
 	
-	@OneToMany(mappedBy = "tiket")
+	@OneToMany(mappedBy = "tiket", cascade = CascadeType.ALL)
 	private List<Butaca> butacas;
 
 	public boolean esNulo() {

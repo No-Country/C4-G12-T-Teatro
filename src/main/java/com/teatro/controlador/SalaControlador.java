@@ -125,7 +125,7 @@ public class SalaControlador {
 	}
 	
 	@PostMapping("/{nombreSala}/show/{idShow}")
-	public ResponseEntity<Sala> agregarShowASala(
+	public ResponseEntity<GetSalaDto> agregarShowASala(
 			@PathVariable String nombreSala,
 			@PathVariable Long idShow){
 		Sala sala = salaService.buscarPorNombre(nombreSala).orElseThrow(() -> new PromocionNoEncontradaException(nombreSala));
@@ -137,18 +137,18 @@ public class SalaControlador {
 		LocalDateTime desde = show.getFechaShow();
 		LocalDateTime hasta = desde.plusMinutes(show.getDuracionMinShow());
 		
-		if(showServicio.tieneLaSalaShowEntreHorarios(show.getSala(), desde, hasta)) {
+		if(showServicio.tieneLaSalaShowEntreHorarios(sala, desde, hasta)) {
 			throw new LaSalaYaTieneUnShowEnEseHorarioException(show.getSala(), desde, hasta);
 		}
 		
 		show.agregarA(sala);
 		showServicio.guardar(show);
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(sala);
+		return ResponseEntity.status(HttpStatus.CREATED).body(converter.convertirSalaAGetSalaDto(sala));
 	}
 	
 	@DeleteMapping("/{nombreSala}/show/{idShow}")
-	public ResponseEntity<Show> eliminarShowASala(
+	public ResponseEntity<GetSalaDto> eliminarShowASala(
 			@PathVariable String nombreSala,
 			@PathVariable Long idShow){
 		Sala sala = salaService.buscarPorNombre(nombreSala).orElseThrow(() -> new PromocionNoEncontradaException(nombreSala));
@@ -160,6 +160,6 @@ public class SalaControlador {
 		show.eliminarSala();
 		showServicio.guardar(show);
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(show);
+		return ResponseEntity.status(HttpStatus.CREATED).body(converter.convertirSalaAGetSalaDto(sala));
 	}
 }

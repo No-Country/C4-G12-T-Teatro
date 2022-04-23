@@ -16,4 +16,6 @@ public interface ShowRepositorio extends JpaRepository<Show, Long>, JpaSpecifica
 	Page<Show> findAll(Specification<Show> specification, Pageable pageable);
 	
 	boolean existsByFechaShowBetweenAndSala(LocalDateTime desde,  LocalDateTime hasta, Sala sala);
+	
+	boolean existsByFechaShowBetweenAndSalaAndIdNot(LocalDateTime desde,  LocalDateTime hasta, Sala sala, Long id);
 }

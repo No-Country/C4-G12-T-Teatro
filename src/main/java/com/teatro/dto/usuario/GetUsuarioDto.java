@@ -15,5 +15,6 @@ public class GetUsuarioDto {
 	private String email;
 	private int edad;
 	private String preferenciaNombre;
+	private String urlAvatar;
 
 }

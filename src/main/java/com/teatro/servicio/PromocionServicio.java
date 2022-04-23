@@ -58,7 +58,7 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 			public Predicate toPredicate(Root<Promocion> root, CriteriaQuery<?> query,
 					CriteriaBuilder criteriaBuilder) {
 				if (categoriaNombre.isPresent()) {
-					return criteriaBuilder.like(criteriaBuilder.lower(root.get("categoria").get("nombre")),
+					return criteriaBuilder.like(criteriaBuilder.lower(root.get("show").get("categoria").get("nombre")),
 							"%" + categoriaNombre.get() + "%");
 				} else {
 					return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
@@ -74,7 +74,7 @@ public class PromocionServicio extends BaseServicio<Promocion, Long, PromocionRe
 					CriteriaBuilder criteriaBuilder) {
 				if (fechaShowString.isPresent()) {
 					LocalDateTime fechaShow = LocalDateTime.parse(fechaShowString.get(), FormateadorFecha.getFormateador());
-					return criteriaBuilder.greaterThanOrEqualTo(root.get("fechaShow"), fechaShow);
+					return criteriaBuilder.greaterThanOrEqualTo(root.get("show").get("fechaShow"), fechaShow);
 				} else {
 					return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
 				}

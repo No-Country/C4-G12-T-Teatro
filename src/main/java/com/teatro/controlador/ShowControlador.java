@@ -103,7 +103,7 @@ public class ShowControlador {
 		if(errores.hasErrors()) {
 			throw new ValidacionException(errores.getAllErrors());
 		}
-		Show show = converter.convertirCrearShowDtoAShow(crearShowDto);
+		Show show = converter.convertirCrearShowDtoAShowManual(crearShowDto);
 		show = showServicio.guardarImagenYAgregarUrlImagen(show, imagen);
 		LocalDateTime desde = show.getFechaShow();
 		LocalDateTime hasta = desde.plusMinutes(show.getDuracionMinShow());
@@ -115,10 +115,10 @@ public class ShowControlador {
 		return ResponseEntity.status(HttpStatus.CREATED).body(showServicio.guardar(show));
 	}
 
-	@PutMapping(name = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PutMapping (value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Show> editarShow(
 			@PathVariable Long id, 
-			@Valid @RequestPart(name = "show") CrearShowDto crearShowDto,
+			@Valid @RequestPart("show") CrearShowDto crearShowDto,
 			Errors errores,
 			@RequestPart("imagen") MultipartFile imagen) {
 		
@@ -133,9 +133,10 @@ public class ShowControlador {
 		LocalDateTime desde = show.getFechaShow();
 		LocalDateTime hasta = desde.plusMinutes(show.getDuracionMinShow());
 		
-		if(showServicio.tieneLaSalaShowEntreHorarios(show.getSala(), desde, hasta)) {
+		if(showServicio.tieneLaSalaShowEntreHorarios(show.getSala(), desde, hasta, show.getId())) {
 			throw new LaSalaYaTieneUnShowEnEseHorarioException(show.getSala(), desde, hasta);
 		}
+		show = converter.convertirCrearShowDtoAShowManual(crearShowDto, show);
 		
 		return ResponseEntity.ok(showServicio.editar(show));
 	}
