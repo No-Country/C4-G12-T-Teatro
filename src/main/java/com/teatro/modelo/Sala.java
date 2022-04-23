@@ -103,7 +103,7 @@ public class Sala implements Serializable{
 			}
 		}
 		
-		return mapa.get(butaca.getFila()).length < butaca.getNumero();
+		return butaca.getNumero() <= mapa.get(butaca.getFila()).length ;
 	}
 	
 	

@@ -1,37 +1,37 @@
-package com.teatro.dto.usuario;
+package com.teatro.dto.compra;
+
+import java.util.Map;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class DatosUsuarioCompraDto {
-
-	@NotBlank
+public class CompraDto {
+	
 	@Size(max = 50)
 	private String nombre;
 	
-	@NotBlank
 	@Size(max = 50)
 	private String apellido;
 	
 	@Email
-	@NotNull
 	private String email;
 	
 	@Min(18)
 	@Max(120)
-	@NotNull
 	private int edad;
+	
+	@NotNull
+	private Map<Integer,Integer[]> butacas;
+	
+	@NotNull
+	private int cantidad;
+	
 }

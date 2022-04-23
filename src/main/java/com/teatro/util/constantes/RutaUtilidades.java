@@ -9,6 +9,7 @@ public class RutaUtilidades {
 	public static final String SALASAGREGARELIMINARSHOW = "/{nombreSala}/show/**";
 	public static final String SALAS = "/salas/**";
 	public static final String USUARIOS = "/usuarios";
+	public static final String TIKET = "/tikets";
 	
 	private RutaUtilidades() {
 	}

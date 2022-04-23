@@ -3,7 +3,7 @@ package com.teatro.util.converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-import com.teatro.dto.Tiket.TiketDto;
+import com.teatro.dto.tiket.TiketDto;
 import com.teatro.modelo.Tiket;
 
 import lombok.RequiredArgsConstructor;

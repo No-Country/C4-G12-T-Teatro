@@ -18,16 +18,16 @@ public class PromocionPorcentual extends Promocion implements Serializable{
 
 	private static final long serialVersionUID = 4206942871044160893L;
 	
-	private float porcentajeACobrar;
+	private float descuento;
 
-	public PromocionPorcentual(String titulo, String urlImagen ,Show show, float descuento) {
-		super(null, titulo, urlImagen, show);
-		this.porcentajeACobrar = (float) ((100 - descuento) / 100.0);
+	public PromocionPorcentual(Long id,String titulo, String urlImagen ,Show show, float descuento) {
+		super(id, titulo, urlImagen, show);
+		this.descuento = descuento;
 	}
 
 	@Override
 	public float getPrecio() {
-		return super.getPrecio() * porcentajeACobrar;
+		return super.getPrecio() * ( 1 - ( descuento / 100) );
 	}
 
 	@Override
